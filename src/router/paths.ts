@@ -11,4 +11,6 @@ export enum paths {
   viewProfile = "/profile",
   addPet = "/addPet",
   myPets = "/myPets",
+  inventory = "/inventory",
+  services = "/services",
 }

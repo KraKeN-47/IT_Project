@@ -9,7 +9,7 @@ interface Props {
   anchorEl: Element | ((element: Element) => Element) | null | undefined;
 }
 
-const ProfileMenu: React.FC<Props> = (props: Props) => {
+const BurgerMenu: React.FC<Props> = (props: Props) => {
   const { handleClose, open, anchorEl } = props;
   const location = useLocation();
   const history = useHistory();
@@ -18,22 +18,22 @@ const ProfileMenu: React.FC<Props> = (props: Props) => {
       <MenuItem
         onClick={() => {
           handleClose();
-          location.pathname !== paths.editProfile &&
-            history.push(paths.editProfile);
+          location.pathname !== paths.services && history.push(paths.services);
         }}
       >
-        Redaguoti profilį
+        Paslaugos
       </MenuItem>
       <MenuItem
         onClick={() => {
           handleClose();
-          location.pathname !== paths.myPets && history.push(paths.myPets);
+          location.pathname !== paths.inventory &&
+            history.push(paths.inventory);
         }}
       >
-        Mano augintiniai
+        Inventorius
       </MenuItem>
     </Menu>
   );
 };
 
-export default ProfileMenu;
+export default BurgerMenu;

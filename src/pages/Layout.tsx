@@ -8,13 +8,23 @@ import { selectUserTypeState } from "modules/userType/userData.selector";
 import { setUserType } from "modules/userType/userData.slice";
 import { paths } from "router/paths";
 import { AccountCircle, ArrowBackIos } from "@material-ui/icons";
-import { ProfileMenu } from "components";
+import { BurgerMenu, ProfileMenu } from "components";
 
 const Layout = ({ children }: any) => {
   const [auth, setAuth] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [
+    profileAnchorEl,
+    setProfileAnchorEl,
+  ] = React.useState<null | HTMLElement>(null);
+  const openProfile = Boolean(profileAnchorEl);
 
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(
+    null
+  );
+  const openMenu = Boolean(menuAnchorEl);
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
   const userData = useSelector(selectUserTypeState);
   const history = useHistory();
   const location = useLocation();
@@ -25,8 +35,8 @@ const Layout = ({ children }: any) => {
   const handleRegisterRedirect = () => {
     location.pathname !== paths.register && history.push(paths.register);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleProfileClose = () => {
+    setProfileAnchorEl(null);
   };
   const handleGoBack = () => {
     history.goBack();
@@ -40,9 +50,17 @@ const Layout = ({ children }: any) => {
     <>
       <AppBar>
         <Toolbar>
-          <IconButton edge="start">
+          <IconButton
+            edge="start"
+            onClick={(e) => setMenuAnchorEl(e.currentTarget)}
+          >
             <MenuIcon />
           </IconButton>
+          <BurgerMenu
+            anchorEl={menuAnchorEl}
+            handleClose={handleMenuClose}
+            open={openMenu}
+          />
           <IconButton onClick={handleGoBack}>
             <ArrowBackIos style={{ color: "tan" }} />
           </IconButton>
@@ -67,16 +85,16 @@ const Layout = ({ children }: any) => {
             <IconButton
               onClick={(e) => {
                 setAuth(true);
-                setAnchorEl(e.currentTarget);
+                setProfileAnchorEl(e.currentTarget);
               }}
             >
               <AccountCircle fontSize="large" />
             </IconButton>
             {auth && (
               <ProfileMenu
-                anchorEl={anchorEl}
-                handleClose={handleClose}
-                open={open}
+                anchorEl={profileAnchorEl}
+                handleClose={handleProfileClose}
+                open={openProfile}
               />
             )}
           </Box>
