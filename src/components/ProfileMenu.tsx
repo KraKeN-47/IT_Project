@@ -16,14 +16,14 @@ const ProfileMenu: React.FC<Props> = (props: Props) => {
   return (
     <Menu
       anchorEl={anchorEl}
+      elevation={0}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: "bottom",
+        horizontal: "center",
       }}
-      keepMounted
       transformOrigin={{
         vertical: "top",
-        horizontal: "right",
+        horizontal: "center",
       }}
       open={open}
       onClose={handleClose}

@@ -6,6 +6,7 @@ import jwt from "jwt-decode";
 import { selectUserTypeState } from "modules/userType/userData.selector";
 import { setUserType } from "modules/userType/userData.slice";
 import { IUserData, Routes } from "types/types";
+import { FadeWrapper } from "components";
 
 interface ProtectedRouteProps {
   userType: IUserData;
@@ -36,13 +37,13 @@ const Path = (props: Routes) => {
     dispatch(setUserType({ id: data.id, name: data.name, level: data.level }));
   }
   return (
-    <>
+    <FadeWrapper>
       {false ? (
         <ProtectedRoute {...protectedRouteProps} />
       ) : (
         <Route {...props} />
       )}
-    </>
+    </FadeWrapper>
   );
 };
 
