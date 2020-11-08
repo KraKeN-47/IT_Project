@@ -1,9 +1,10 @@
-import { Box, Button, TextField } from "@material-ui/core";
-import { FormWrapper } from "components";
+import { Box, Button, Fab, TextField } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import { paths } from "router/paths";
+import { FormWrapper } from "components";
 
 export default function EditProfilePage() {
   const history = useHistory();
@@ -58,6 +59,10 @@ export default function EditProfilePage() {
             Patvirtinti
           </Button>
         </form>
+        <h4 style={{ paddingTop: "20px" }}>Šalinti paskyrą</h4>
+        <Fab>
+          <DeleteIcon />
+        </Fab>
       </Box>
     </FormWrapper>
   );
