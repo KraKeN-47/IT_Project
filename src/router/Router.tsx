@@ -13,6 +13,8 @@ import {
   EditProfilePage,
   DisplayPetsPage,
   CreatePetPage,
+  DisplayWorkersPage,
+  AddWorkerPage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -79,6 +81,16 @@ export const routes: Routes[] = [
   {
     path: paths.addPet,
     component: CreatePetPage,
+    protected: true,
+  },
+  {
+    path: paths.workers,
+    component: DisplayWorkersPage,
+    protected: true,
+  },
+  {
+    path: paths.addWorker,
+    component: AddWorkerPage,
     protected: true,
   },
 ];

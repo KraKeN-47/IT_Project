@@ -13,4 +13,6 @@ export enum paths {
   myPets = "/myPets",
   inventory = "/inventory",
   services = "/services",
+  workers = "/workers",
+  addWorker = "/addWorker",
 }
