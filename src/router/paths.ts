@@ -8,4 +8,7 @@ export enum paths {
   users = "/users",
   resetPassword = "/resetPassword",
   editProfile = "/editProfile",
+  viewProfile = "/profile",
+  addPet = "/addPet",
+  myPets = "/myPets",
 }

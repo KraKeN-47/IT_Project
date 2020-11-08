@@ -6,3 +6,5 @@ export { default as AvailableOrdersListPage } from "./AvailableOrdersListPage";
 export { default as AdminPage } from "./AdminPage";
 export { default as ResetPasswordPage } from "./authorizationPages/ResetPasswordPage";
 export { default as EditProfilePage } from "./profile/EditProfilePage";
+export { default as DisplayPetsPage } from "./user/DisplayPetsPage";
+export { default as CreatePetPage } from "./user/CreatePetPage";

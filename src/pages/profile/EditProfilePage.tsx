@@ -1,11 +1,11 @@
 import { Box, Button, TextField } from "@material-ui/core";
+import { FormWrapper } from "components";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { FormWrapper } from "components";
 import { paths } from "router/paths";
 
-const EditProfilePage: React.FC = () => {
+export default function EditProfilePage() {
   const history = useHistory();
   return (
     <FormWrapper>
@@ -61,6 +61,4 @@ const EditProfilePage: React.FC = () => {
       </Box>
     </FormWrapper>
   );
-};
-
-export default EditProfilePage;
+}

@@ -11,6 +11,8 @@ import {
   AdminPage,
   ResetPasswordPage,
   EditProfilePage,
+  DisplayPetsPage,
+  CreatePetPage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -32,17 +34,14 @@ export const routes: Routes[] = [
   {
     path: paths.home,
     component: LandingPage,
-    protected: false,
   },
   {
     path: paths.login,
     component: LoginPage,
-    protected: false,
   },
   {
     path: paths.register,
     component: RegisterPage,
-    protected: false,
   },
   {
     path: paths.availableTimes,
@@ -65,11 +64,21 @@ export const routes: Routes[] = [
   {
     path: paths.resetPassword,
     component: ResetPasswordPage,
-    protected: false,
   },
+
   {
     path: paths.editProfile,
     component: EditProfilePage,
+    protected: true,
+  },
+  {
+    path: paths.myPets,
+    component: DisplayPetsPage,
+    protected: true,
+  },
+  {
+    path: paths.addPet,
+    component: CreatePetPage,
     protected: true,
   },
 ];

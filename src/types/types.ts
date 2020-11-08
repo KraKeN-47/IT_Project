@@ -13,6 +13,6 @@ export interface ReduxStoreRootTypes {
 export interface Routes extends RouteProps {
   component: React.FC;
   path: string;
-  protected: boolean | undefined;
+  protected?: boolean | undefined;
   userLevel?: number;
 }

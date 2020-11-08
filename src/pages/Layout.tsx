@@ -1,30 +1,35 @@
 import { AppBar, Box, Button, IconButton, Toolbar } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { selectUserTypeState } from "modules/userType/userData.selector";
 import { setUserType } from "modules/userType/userData.slice";
 import { paths } from "router/paths";
 import { AccountCircle, ArrowBackIos } from "@material-ui/icons";
+import { ProfileMenu } from "components";
 
 const Layout = ({ children }: any) => {
+  const [auth, setAuth] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
   const userData = useSelector(selectUserTypeState);
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const handleLoginRedirect = () => {
     history.push(paths.login);
   };
   const handleRegisterRedirect = () => {
-    history.push(paths.register);
+    location.pathname !== paths.register && history.push(paths.register);
   };
-  const handleEditProfileRedirect = () => {
-    history.push(paths.editProfile);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   const handleGoBack = () => {
     history.goBack();
-    console.log("not working");
   };
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -59,9 +64,21 @@ const Layout = ({ children }: any) => {
             <Button style={{ backgroundColor: "tan" }} variant="contained">
               Atsijungti
             </Button>
-            <IconButton onClick={handleEditProfileRedirect}>
+            <IconButton
+              onClick={(e) => {
+                setAuth(true);
+                setAnchorEl(e.currentTarget);
+              }}
+            >
               <AccountCircle fontSize="large" />
             </IconButton>
+            {auth && (
+              <ProfileMenu
+                anchorEl={anchorEl}
+                handleClose={handleClose}
+                open={open}
+              />
+            )}
           </Box>
         </Toolbar>
       </AppBar>
