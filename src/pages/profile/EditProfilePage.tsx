@@ -48,11 +48,16 @@ export default function EditProfilePage() {
             >
               Keisti slaptažodį
             </Button>
-            <Box margin="auto">
-              <label style={{ fontWeight: "bolder" }}>
+            <Box margin="auto" display="grid">
+              <label style={{ fontWeight: "bolder", marginBottom: "10px" }}>
                 Įkelti nuotrauką
-                <TextField id="test" type="file" />
               </label>
+              <input type="file" />
+              <Box mt="20px">
+                <Button color="secondary" variant="outlined">
+                  Pašalinti profilio nuotrauką
+                </Button>
+              </Box>
             </Box>
           </Box>
           <Button variant="contained" color="secondary">
