@@ -54,7 +54,7 @@ const Layout = ({ children }: any) => {
             edge="start"
             onClick={(e) => setMenuAnchorEl(e.currentTarget)}
           >
-            <MenuIcon />
+            <MenuIcon style={{ color: "tan" }} />
           </IconButton>
           <BurgerMenu
             anchorEl={menuAnchorEl}
@@ -65,20 +65,6 @@ const Layout = ({ children }: any) => {
             <ArrowBackIos style={{ color: "tan" }} />
           </IconButton>
           <Box ml="auto">
-            <Button
-              style={{ backgroundColor: "tan" }}
-              variant="contained"
-              onClick={handleRegisterRedirect}
-            >
-              Registruotis
-            </Button>
-            <Button
-              style={{ backgroundColor: "tan" }}
-              variant="contained"
-              onClick={handleLoginRedirect}
-            >
-              Prisijungti
-            </Button>
             <Button style={{ backgroundColor: "tan" }} variant="contained">
               Atsijungti
             </Button>

@@ -33,4 +33,18 @@ export const burgerMenuItemsData = ({
     },
     children: "Darbuotojai",
   },
+  {
+    onClick: () => {
+      handleClose();
+      location.pathname !== paths.register && history.push(paths.register);
+    },
+    children: "Registruotis",
+  },
+  {
+    onClick: () => {
+      handleClose();
+      location.pathname !== paths.login && history.push(paths.login);
+    },
+    children: "Prisijungti",
+  },
 ];
