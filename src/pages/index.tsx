@@ -9,4 +9,4 @@ export { default as EditProfilePage } from "./profile/EditProfilePage";
 export { default as DisplayPetsPage } from "./user/DisplayPetsPage";
 export { default as CreatePetPage } from "./user/CreatePetPage";
 export { default as DisplayWorkersPage } from "./admin/DisplayWorkersPage";
-export { default as AddWorkerPage } from "./admin/AddWorkerPage";
+export { default as WorkerPage } from "./admin/WorkerPage";

@@ -9,7 +9,8 @@ import { paths } from "router/paths";
 import { setUserType } from "modules/userType/userData.slice";
 import { FormWrapper } from "components";
 
-const AddWorkerPage = () => {
+const AddWorkerPage = (data: any) => {
+  const props = data.location.state ? data.location.state.props : null;
   const history = useHistory();
   const dispatch = useDispatch();
   const [name, setName] = useState("");
@@ -59,6 +60,7 @@ const AddWorkerPage = () => {
             id="outlined-basic"
             label="Vardas"
             name="name"
+            defaultValue={props ? props.name : ""}
             required
           />
           <TextField
@@ -66,7 +68,8 @@ const AddWorkerPage = () => {
             color="primary"
             id="outlined-basic"
             label="Pavardė"
-            name="name"
+            name="surname"
+            defaultValue={props ? props.surname : ""}
             required
           />
           <TextField
@@ -75,6 +78,7 @@ const AddWorkerPage = () => {
             id="outlined-basic"
             label="El. Paštas"
             name="email"
+            defaultValue={props ? props.email : ""}
             required
           />
           <TextField
@@ -82,34 +86,41 @@ const AddWorkerPage = () => {
             color="primary"
             id="outlined-basic"
             label="Adresas"
-            name="email"
+            name="address"
+            defaultValue={props ? props.address : ""}
             required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Slaptažodis"
-            name="password"
-            type="password"
-            required
-          />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Pakartokite slaptažodį"
-            name="repeatPassword"
-            type="password"
-            required
-          />
+          {!props && (
+            <TextField
+              style={{ paddingBottom: "20px" }}
+              color="primary"
+              id="outlined-basic"
+              label="Slaptažodis"
+              name="password"
+              type="password"
+              defaultValue={props ? props.name : ""}
+              required
+            />
+          )}
+          {!props && (
+            <TextField
+              style={{ paddingBottom: "20px" }}
+              color="primary"
+              id="outlined-basic"
+              label="Pakartokite slaptažodį"
+              name="repeatPassword"
+              type="password"
+              required
+            />
+          )}
           <TextField
             style={{ paddingBottom: "20px" }}
             color="primary"
             id="outlined-basic"
             label="Asmens Kodas"
-            name="answer"
+            name="socialNr"
             type="text"
+            defaultValue={props ? props.socialNr : ""}
             required
           />
           <TextField
@@ -117,12 +128,13 @@ const AddWorkerPage = () => {
             color="primary"
             id="outlined-basic"
             label="Telefono Nr."
-            name="answer"
+            name="phoneNr"
             type="text"
+            defaultValue={props ? props.phone : ""}
             required
           />
           <Button color="primary" variant="contained" type="submit">
-            Registruotis
+            {!props ? "Registruoti" : "Redaguoti"}
           </Button>
         </form>
       </Box>

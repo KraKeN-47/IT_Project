@@ -15,4 +15,5 @@ export enum paths {
   services = "/services",
   workers = "/workers",
   addWorker = "/addWorker",
+  editWorker = "/editWorker",
 }

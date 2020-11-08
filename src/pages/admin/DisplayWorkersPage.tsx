@@ -1,7 +1,9 @@
 import {
   Box,
   Fab,
+  Paper,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableHead,
@@ -9,6 +11,9 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { NavLink } from "react-router-dom";
 
 import { FormWrapper } from "components";
 import { useHistory } from "react-router";
@@ -29,18 +34,58 @@ export default function DisplayWorkersPage() {
         textAlign="center"
       >
         <h2>Darbuotojų lentelė</h2>
-        <TableContainer>
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Vardas</TableCell>
-                <TableCell>Pavardė</TableCell>
-                <TableCell>Adresas</TableCell>
-                <TableCell>El. paštas</TableCell>
-                <TableCell>Asmens kodas</TableCell>
-                <TableCell>Telefono nr.</TableCell>
+                <TableCell align="center">Vardas</TableCell>
+                <TableCell align="center">Pavardė</TableCell>
+                <TableCell align="center">Adresas</TableCell>
+                <TableCell align="center">El. paštas</TableCell>
+                <TableCell align="center">Asmens kodas</TableCell>
+                <TableCell align="center">Telefono nr.</TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="center">Vardas</TableCell>
+                <TableCell align="center">Pavardė</TableCell>
+                <TableCell align="center">Adresas</TableCell>
+                <TableCell align="center">El. paštas</TableCell>
+                <TableCell align="center">Asmens kodas</TableCell>
+                <TableCell align="center">Telefono nr.</TableCell>
+                <TableCell align="center">
+                  <NavLink
+                    to={{
+                      pathname: paths.editWorker,
+                      state: {
+                        props: {
+                          name: "Vardas",
+                          surname: "Pavardė",
+                          email: "El. Paštas",
+                          address: "Adresas",
+                          phone: "Telefono nr",
+                          socialNr: "Asmens kodas",
+                        },
+                        loading: true,
+                      },
+                    }}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Fab size="small">
+                      <EditIcon />
+                    </Fab>
+                  </NavLink>
+                </TableCell>
+                <TableCell align="center">
+                  <Fab size="small">
+                    <DeleteIcon />
+                  </Fab>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
         </TableContainer>
         <Box mt="20px">

@@ -14,7 +14,7 @@ import {
   DisplayPetsPage,
   CreatePetPage,
   DisplayWorkersPage,
-  AddWorkerPage,
+  WorkerPage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -90,7 +90,12 @@ export const routes: Routes[] = [
   },
   {
     path: paths.addWorker,
-    component: AddWorkerPage,
+    component: WorkerPage,
+    protected: true,
+  },
+  {
+    path: paths.editWorker,
+    component: WorkerPage,
     protected: true,
   },
 ];
