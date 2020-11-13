@@ -8,5 +8,9 @@ export { default as ResetPasswordPage } from "./authorization/ResetPasswordPage"
 export { default as EditProfilePage } from "./profile/EditProfilePage";
 export { default as DisplayPetsPage } from "./user/DisplayPetsPage";
 export { default as CreatePetPage } from "./user/CreatePetPage";
-export { default as DisplayWorkersPage } from "./admin/DisplayWorkersPage";
-export { default as WorkerPage } from "./admin/WorkerPage";
+export { default as DisplayWorkersPage } from "./admin/workers/DisplayWorkersPage";
+export { default as WorkerPage } from "./admin/workers/WorkerPage";
+export { default as DisplayInventoryPage } from "./admin/inventory/DisplayInventoryPage";
+export { default as InventoryPage } from "./admin/inventory/InventoryPage";
+export { default as DisplayServicesPage } from "./admin/services/DisplayServicesPage";
+export { default as ServicesPage } from "./admin/services/ServicesPage";

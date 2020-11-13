@@ -15,6 +15,10 @@ import {
   CreatePetPage,
   DisplayWorkersPage,
   WorkerPage,
+  DisplayInventoryPage,
+  InventoryPage,
+  DisplayServicesPage,
+  ServicesPage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -96,6 +100,36 @@ export const routes: Routes[] = [
   {
     path: paths.editWorker,
     component: WorkerPage,
+    protected: true,
+  },
+  {
+    path: paths.inventory,
+    component: DisplayInventoryPage,
+    protected: true,
+  },
+  {
+    path: paths.editInventory,
+    component: InventoryPage,
+    protected: true,
+  },
+  {
+    path: paths.addInventory,
+    component: InventoryPage,
+    protected: true,
+  },
+  {
+    path: paths.addService,
+    component: ServicesPage,
+    protected: true,
+  },
+  {
+    path: paths.editService,
+    component: ServicesPage,
+    protected: true,
+  },
+  {
+    path: paths.services,
+    component: DisplayServicesPage,
     protected: true,
   },
 ];

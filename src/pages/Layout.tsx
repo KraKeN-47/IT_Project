@@ -65,7 +65,11 @@ const Layout = ({ children }: any) => {
             <ArrowBackIos style={{ color: "tan" }} />
           </IconButton>
           <Box ml="auto">
-            <Button style={{ backgroundColor: "tan" }} variant="contained">
+            <Button
+              size="medium"
+              variant="outlined"
+              style={{ color: "white", borderColor: "white" }}
+            >
               Atsijungti
             </Button>
             <IconButton
