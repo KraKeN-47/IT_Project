@@ -1,9 +1,6 @@
 export { default as LandingPage } from "./LandingPage";
 export { default as LoginPage } from "./authorization/LoginPage";
 export { default as RegisterPage } from "./authorization/RegisterPage";
-export { default as PlacedOrdersListPage } from "./AvailableOrdersListPage";
-export { default as AvailableOrdersListPage } from "./AvailableOrdersListPage";
-export { default as AdminPage } from "./AdminPage";
 export { default as ResetPasswordPage } from "./authorization/ResetPasswordPage";
 export { default as EditProfilePage } from "./profile/EditProfilePage";
 export { default as DisplayPetsPage } from "./user/DisplayPetsPage";

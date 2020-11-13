@@ -36,12 +36,6 @@ const Layout = ({ children }: any) => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
-  const handleLoginRedirect = () => {
-    history.push(paths.login);
-  };
-  const handleRegisterRedirect = () => {
-    location.pathname !== paths.register && history.push(paths.register);
-  };
   const handleProfileClose = () => {
     setProfileAnchorEl(null);
   };
@@ -76,6 +70,7 @@ const Layout = ({ children }: any) => {
               size="medium"
               variant="outlined"
               style={{ color: "white", borderColor: "white" }}
+              // onClick={handleLogout}
             >
               Atsijungti
             </Button>

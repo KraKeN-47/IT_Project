@@ -5,10 +5,7 @@ import { paths } from "./paths";
 import {
   LandingPage,
   LoginPage,
-  AvailableOrdersListPage,
   RegisterPage,
-  PlacedOrdersListPage,
-  AdminPage,
   ResetPasswordPage,
   EditProfilePage,
   DisplayPetsPage,
@@ -49,24 +46,6 @@ export const routes: Routes[] = [
   {
     path: paths.register,
     component: RegisterPage,
-  },
-  {
-    path: paths.availableTimes,
-    component: AvailableOrdersListPage,
-    protected: true,
-    userLevel: 1,
-  },
-  {
-    path: paths.reservedTimes,
-    component: PlacedOrdersListPage,
-    protected: true,
-    userLevel: 2,
-  },
-  {
-    path: paths.adminPage,
-    component: AdminPage,
-    protected: true,
-    userLevel: 2,
   },
   {
     path: paths.resetPassword,
