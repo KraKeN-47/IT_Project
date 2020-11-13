@@ -47,4 +47,12 @@ export const burgerMenuItemsData = ({
     },
     children: "Prisijungti",
   },
+  {
+    onClick: () => {
+      handleClose();
+      location.pathname !== paths.userServices &&
+        history.push(paths.userServices);
+    },
+    children: "Teikiamos paslaugas",
+  },
 ];

@@ -19,6 +19,7 @@ import {
   InventoryPage,
   DisplayServicesPage,
   ServicesPage,
+  ReserveServicePage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -130,6 +131,16 @@ export const routes: Routes[] = [
   {
     path: paths.services,
     component: DisplayServicesPage,
+    protected: true,
+  },
+  {
+    path: paths.userServices,
+    component: ReserveServicePage,
+    protected: true,
+  },
+  {
+    path: paths.myServices,
+    component: ReserveServicePage,
     protected: true,
   },
 ];

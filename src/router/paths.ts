@@ -11,9 +11,11 @@ export enum paths {
   editProfile = "/editProfile",
   viewProfile = "/profile",
   // Services crud
+  userServices = "/userServices",
   services = "/services",
   addService = "/addService",
   editService = "/editService",
+  myServices = "/serviceHistory",
   // Pet crud
   addPet = "/addPet",
   myPets = "/myPets",

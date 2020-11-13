@@ -1,4 +1,11 @@
-import { AppBar, Box, Button, IconButton, Toolbar } from "@material-ui/core";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Toolbar,
+} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +14,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { selectUserTypeState } from "modules/userType/userData.selector";
 import { setUserType } from "modules/userType/userData.slice";
 import { paths } from "router/paths";
-import { AccountCircle, ArrowBackIos } from "@material-ui/icons";
+import { ArrowBackIos } from "@material-ui/icons";
 import { BurgerMenu, ProfileMenu } from "components";
 
 const Layout = ({ children }: any) => {
@@ -78,7 +85,7 @@ const Layout = ({ children }: any) => {
                 setProfileAnchorEl(e.currentTarget);
               }}
             >
-              <AccountCircle fontSize="large" />
+              <Avatar />
             </IconButton>
             {auth && (
               <ProfileMenu

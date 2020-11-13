@@ -1,6 +1,9 @@
-import { Menu, MenuItem } from "@material-ui/core";
+import { ListItemIcon, Menu, MenuItem, Typography } from "@material-ui/core";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import PetsIcon from "@material-ui/icons/Pets";
+import EditIcon from "@material-ui/icons/Edit";
+
 import { paths } from "router/paths";
 
 interface Props {
@@ -22,7 +25,10 @@ const ProfileMenu: React.FC<Props> = (props: Props) => {
             history.push(paths.editProfile);
         }}
       >
-        Redaguoti profilį
+        <ListItemIcon>
+          <EditIcon fontSize="small" color="primary" />
+        </ListItemIcon>
+        <Typography color="primary">Redaguoti profilį</Typography>
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -30,7 +36,10 @@ const ProfileMenu: React.FC<Props> = (props: Props) => {
           location.pathname !== paths.myPets && history.push(paths.myPets);
         }}
       >
-        Mano augintiniai
+        <ListItemIcon>
+          <PetsIcon fontSize="small" color="primary" />
+        </ListItemIcon>
+        <Typography color="primary">Mano augintiniai</Typography>
       </MenuItem>
     </Menu>
   );
