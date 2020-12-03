@@ -12,3 +12,4 @@ export { default as InventoryPage } from "./admin/inventory/InventoryPage";
 export { default as DisplayServicesPage } from "./admin/services/DisplayServicesPage";
 export { default as ServicesPage } from "./admin/services/ServicesPage";
 export { default as ReserveServicePage } from "./user/ReserveServicePage";
+export { default as AvatarOptionsPage } from "./profile/AvatarOptions";

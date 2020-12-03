@@ -1,17 +1,53 @@
-import { Box, Button, Fab, TextField } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  createStyles,
+  Fab,
+  makeStyles,
+  Modal,
+  TextField,
+  Theme,
+  Typography,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import jwt from "jwt-decode";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { selectUserId } from "modules/userType/userData.selector";
-import { setImagePath } from "modules/image/image.slice";
 import { FormWrapper } from "components";
 import { api } from "global/variables";
+import { useHistory } from "react-router";
+import { paths } from "router/paths";
+import { logout } from "modules/userType/userData.slice";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paper: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+    },
+    buttons: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: "20px",
+    },
+  })
+);
 
 export default function EditProfilePage() {
   const userId = useSelector(selectUserId());
+  const history = useHistory();
+  const classes = useStyles();
   const dispatch = useDispatch();
+  const [isModal, setIsModal] = useState(false);
 
   const initialState = (stateName: string) => {
     const token = localStorage.getItem("token");
@@ -33,31 +69,8 @@ export default function EditProfilePage() {
   const [telefonoNumeris, setTelefonoNumeris] = useState(
     initialState("telefonoNumeris")
   );
-  const [file, setFile] = useState<any>(undefined);
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files !== null) {
-      setFile(e.target.files[0]);
-    }
-  };
-
-  const handlePictureDelete = async () => {
-    const resp = await api.delete(`/Picture/delete/${userId}`);
-    alert(resp.data.message);
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (file) {
-      var formData = new FormData();
-      formData.append("image", file);
-      formData.append("userId", `${userId}`);
-      const resp = await api.post("/Picture/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      dispatch(setImagePath({ imagePath: resp.data.imagePath }));
-    }
     if (email !== initialState("email")) {
       const resp = await api.post("/Auth/changeEmail", {
         userId: userId.toString(),
@@ -86,6 +99,17 @@ export default function EditProfilePage() {
       alert(resp.data.message);
     }
     window.location.reload();
+  };
+  const handleDeleteUser = async () => {
+    try {
+      const resp = await api.delete(`/Auth/deleteUser/${userId}`);
+      history.push(paths.home);
+      localStorage.removeItem("token");
+      dispatch(logout());
+      alert(resp.data.message);
+    } catch (error) {
+      alert("Serverio klaida");
+    }
   };
 
   return (
@@ -123,31 +147,51 @@ export default function EditProfilePage() {
             onChange={(e) => setTelefonoNumeris(e.target.value)}
             defaultValue={telefonoNumeris}
           />
-          <Box display="flex" marginBottom="20px">
-            <Box margin="auto" display="grid">
-              <label style={{ fontWeight: "bolder", marginBottom: "10px" }}>
-                Įkelti nuotrauką
-              </label>
-              <input type="file" onChange={handleImageUpload} />
-              <Box mt="20px">
-                <Button
-                  color="secondary"
-                  variant="outlined"
-                  onClick={handlePictureDelete}
-                >
-                  Pašalinti profilio nuotrauką
-                </Button>
-              </Box>
-            </Box>
-          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginBottom: "20px" }}
+            onClick={() => history.push(paths.profilePicture)}
+          >
+            Profilio nuotraukos nustatymai
+          </Button>
           <Button variant="contained" color="secondary" type="submit">
             Patvirtinti
           </Button>
         </form>
         <h4 style={{ paddingTop: "20px" }}>Šalinti paskyrą</h4>
-        <Fab>
+        <Fab onClick={() => setIsModal(true)}>
           <DeleteIcon />
         </Fab>
+        <Modal
+          className={classes.modal}
+          open={isModal}
+          onClose={() => setIsModal(false)}
+        >
+          <div className={classes.paper}>
+            <Typography variant="h4">
+              Ar tikrai norite pašalinti paskyrą?
+            </Typography>
+            <div className={classes.buttons}>
+              <Button
+                color="secondary"
+                variant="contained"
+                size="large"
+                onClick={handleDeleteUser}
+              >
+                Tęsti
+              </Button>
+              <Button
+                color="primary"
+                variant="contained"
+                size="large"
+                onClick={() => setIsModal(false)}
+              >
+                Atšaukti
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </Box>
     </FormWrapper>
   );

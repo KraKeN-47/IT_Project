@@ -17,6 +17,7 @@ import {
   DisplayServicesPage,
   ServicesPage,
   ReserveServicePage,
+  AvatarOptionsPage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -52,6 +53,12 @@ export const routes: Routes[] = [
   {
     path: paths.editProfile,
     component: EditProfilePage,
+    userLevel: 1,
+    protected: true,
+  },
+  {
+    path: paths.profilePicture,
+    component: AvatarOptionsPage,
     userLevel: 1,
     protected: true,
   },

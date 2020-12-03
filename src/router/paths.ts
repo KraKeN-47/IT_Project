@@ -5,6 +5,7 @@ export enum paths {
   reservedTimes = "/reserved-items",
   users = "/users",
   // Profile crud
+  profilePicture = "/profilePicture",
   register = "/register",
   login = "/login",
   resetPassword = "/resetPassword",
