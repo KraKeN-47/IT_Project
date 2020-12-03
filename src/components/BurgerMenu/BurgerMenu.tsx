@@ -1,5 +1,7 @@
 import { Menu, MenuItem } from "@material-ui/core";
+import { selectUserTypeLevel } from "modules/userType/userData.selector";
 import React from "react";
+import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 
 import { burgerMenuItemsData } from "./burgerMenuItemsData";
@@ -14,6 +16,7 @@ const BurgerMenu: React.FC<Props> = (props: Props) => {
   const { handleClose, open, anchorEl } = props;
   const location = useLocation();
   const history = useHistory();
+  const userLevel = useSelector(selectUserTypeLevel());
 
   const burgerMenuItems = burgerMenuItemsData({
     location,
@@ -23,9 +26,11 @@ const BurgerMenu: React.FC<Props> = (props: Props) => {
 
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-      {burgerMenuItems.map((props, index) => (
-        <MenuItem key={index} {...props} />
-      ))}
+      {burgerMenuItems
+        .filter((item) => item.level <= userLevel)
+        .map((props, index) => (
+          <MenuItem key={index} {...props} />
+        ))}
     </Menu>
   );
 };

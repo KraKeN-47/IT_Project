@@ -18,6 +18,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.services && history.push(paths.services);
     },
     children: "Paslaugos",
+    level: 2,
   },
   {
     onClick: () => {
@@ -25,6 +26,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.inventory && history.push(paths.inventory);
     },
     children: "Inventorius",
+    level: 2,
   },
   {
     onClick: () => {
@@ -32,6 +34,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.workers && history.push(paths.workers);
     },
     children: "Darbuotojai",
+    level: 2,
   },
   {
     onClick: () => {
@@ -39,6 +42,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.register && history.push(paths.register);
     },
     children: "Registruotis",
+    level: -1,
   },
   {
     onClick: () => {
@@ -46,6 +50,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.login && history.push(paths.login);
     },
     children: "Prisijungti",
+    level: -1,
   },
   {
     onClick: () => {
@@ -53,6 +58,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.userServices &&
         history.push(paths.userServices);
     },
-    children: "Teikiamos paslaugas",
+    children: "Teikiamos paslaugos",
+    level: -1,
   },
 ];

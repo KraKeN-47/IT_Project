@@ -11,12 +11,15 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { FormWrapper } from "components";
 import { paths } from "router/paths";
+import { selectUserTypeLevel } from "modules/userType/userData.selector";
 
 export default function ReserveServicesPage() {
   const location = useLocation();
+  const userLevel = useSelector(selectUserTypeLevel());
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   useEffect(() => {
     location.pathname === paths.myServices
@@ -74,7 +77,7 @@ export default function ReserveServicesPage() {
                     }}
                     style={{ textDecoration: "none" }}
                   >
-                    {isButtonVisible && (
+                    {isButtonVisible && userLevel > 0 && (
                       <Button variant="contained" color="primary">
                         Pirkti paslaugą
                       </Button>

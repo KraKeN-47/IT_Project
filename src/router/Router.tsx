@@ -131,8 +131,6 @@ export const routes: Routes[] = [
   {
     path: paths.userServices,
     component: ReserveServicePage,
-    userLevel: 1,
-    protected: true,
   },
   {
     path: paths.myServices,

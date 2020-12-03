@@ -22,7 +22,7 @@ const LandingPage: React.FC = () => {
       marginTop="20%"
       textAlign="center"
     >
-      <h1>Sveiki atvykę į Naminių gyvūnų viešbutį</h1>
+      <h1>Sveiki atvykę į Veterinarijos kliniką</h1>
       <div style={{ paddingBottom: "10px" }}>
         <Button variant="contained" color="primary" onClick={handleLogin}>
           Prisijungti
