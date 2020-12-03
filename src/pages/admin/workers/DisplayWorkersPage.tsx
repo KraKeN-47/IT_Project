@@ -68,6 +68,8 @@ export default function DisplayWorkersPage() {
                           address: "Adresas",
                           phone: "Telefono nr",
                           socialNr: "Asmens kodas",
+                          position: "Tevas",
+                          isAdmin: true,
                         },
                         loading: true,
                       },

@@ -6,8 +6,13 @@ export interface IUserData {
   id: number;
 }
 
+export interface Image {
+  imagePath: string;
+}
+
 export interface ReduxStoreRootTypes {
   userData: IUserData;
+  image: Image;
 }
 
 export interface Routes extends RouteProps {

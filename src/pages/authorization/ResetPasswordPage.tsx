@@ -3,7 +3,7 @@ import React from "react";
 
 import { FormWrapper } from "components";
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage: React.FC = () => {
   return (
     <FormWrapper>
       <Box

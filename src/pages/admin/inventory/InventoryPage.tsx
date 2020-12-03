@@ -6,7 +6,6 @@ import jwt from "jwt-decode";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
-import { setUserType } from "modules/userType/userData.slice";
 import { FormWrapper } from "components";
 
 const InventoryPage = (data: any) => {

@@ -2,7 +2,6 @@ export enum paths {
   home = "/",
   availableTimes = "/available-items",
   reservedTimes = "/reserved-items",
-  adminPage = "/admin",
   users = "/users",
   // Profile crud
   register = "/register",

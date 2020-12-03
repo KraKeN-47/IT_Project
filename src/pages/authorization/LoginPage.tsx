@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { TextField, Box, Button } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import jwt from "jwt-decode";
 
-import { setUserType } from "modules/userType/userData.slice";
+import { login } from "modules/userType/userData.slice";
 import { api } from "global/variables";
 import { paths } from "router/paths";
 import { Link } from "react-router-dom";
@@ -17,19 +18,27 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await api
-      .post("Users/login", { email, password })
+    api
+      .post("/Auth/login", { pastas: email, password })
       .then((resp) => {
-        const user = resp.data.userData;
-        dispatch(
-          setUserType({ id: user.id, level: user.level, name: user.name })
-        );
+        const user = resp.data;
+        var token: any = jwt(user.token);
+        const level = parseInt(token.level);
         localStorage.setItem("token", user.token);
-        user.level <= 1
-          ? history.push(paths.availableTimes)
-          : user.level > 2
-          ? history.push(paths.adminPage)
-          : history.push(paths.reservedTimes);
+        dispatch(
+          login({
+            id: parseInt(user.id),
+            level,
+            name: user.name,
+          })
+        );
+        if (level <= 1) {
+          history.push(paths.userServices);
+          alert("Sėkmingai prisijungėte");
+        } else {
+          history.push(paths.services);
+          alert("Sėkmingai prisijungėte");
+        }
       })
       .catch((resp) => alert(resp.response.data));
   };

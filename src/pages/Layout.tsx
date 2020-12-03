@@ -12,10 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 
 import { selectUserTypeState } from "modules/userType/userData.selector";
-import { setUserType } from "modules/userType/userData.slice";
+import { logout } from "modules/userType/userData.slice";
 import { paths } from "router/paths";
 import { ArrowBackIos } from "@material-ui/icons";
 import { BurgerMenu, ProfileMenu } from "components";
+import { selectImagePath } from "modules/image/image.selector";
 
 const Layout = ({ children }: any) => {
   const [auth, setAuth] = useState(false);
@@ -24,7 +25,7 @@ const Layout = ({ children }: any) => {
     setProfileAnchorEl,
   ] = React.useState<null | HTMLElement>(null);
   const openProfile = Boolean(profileAnchorEl);
-
+  const imagePath = useSelector(selectImagePath());
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(
     null
   );
@@ -32,9 +33,11 @@ const Layout = ({ children }: any) => {
   const handleMenuClose = () => {
     setMenuAnchorEl(null);
   };
+
   const userData = useSelector(selectUserTypeState);
   const history = useHistory();
   const location = useLocation();
+
   const dispatch = useDispatch();
   const handleProfileClose = () => {
     setProfileAnchorEl(null);
@@ -44,9 +47,11 @@ const Layout = ({ children }: any) => {
   };
   const handleLogout = () => {
     localStorage.removeItem("token");
-    dispatch(setUserType({ id: -1, level: 0, name: "" }));
+    dispatch(logout());
+    history.push(paths.home);
     alert("Sėkmingai atsijungėte");
   };
+
   return (
     <>
       <AppBar>
@@ -66,22 +71,26 @@ const Layout = ({ children }: any) => {
             <ArrowBackIos style={{ color: "tan" }} />
           </IconButton>
           <Box ml="auto">
-            <Button
-              size="medium"
-              variant="outlined"
-              style={{ color: "white", borderColor: "white" }}
-              // onClick={handleLogout}
-            >
-              Atsijungti
-            </Button>
-            <IconButton
-              onClick={(e) => {
-                setAuth(true);
-                setProfileAnchorEl(e.currentTarget);
-              }}
-            >
-              <Avatar />
-            </IconButton>
+            {userData.level > 0 && (
+              <Button
+                size="medium"
+                variant="outlined"
+                style={{ color: "white", borderColor: "white" }}
+                onClick={handleLogout}
+              >
+                Atsijungti
+              </Button>
+            )}
+            {userData.level > 0 && (
+              <IconButton
+                onClick={(e) => {
+                  setAuth(true);
+                  setProfileAnchorEl(e.currentTarget);
+                }}
+              >
+                <Avatar src={imagePath} />
+              </IconButton>
+            )}
             {auth && (
               <ProfileMenu
                 anchorEl={profileAnchorEl}

@@ -1,4 +1,10 @@
-import { Box, Button, TextField } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -6,7 +12,6 @@ import jwt from "jwt-decode";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
-import { setUserType } from "modules/userType/userData.slice";
 import { FormWrapper } from "components";
 
 const AddWorkerPage = (data: any) => {
@@ -19,6 +24,7 @@ const AddWorkerPage = (data: any) => {
   const [repeatPass, setRepeatPass] = useState("");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // await api
@@ -42,7 +48,9 @@ const AddWorkerPage = (data: any) => {
     //   })
     //   .catch((x) => alert(x.response.data));
   };
-
+  const handleCheckBox = (checked: boolean) => {
+    setIsAdmin(checked);
+  };
   return (
     <FormWrapper>
       <Box
@@ -132,6 +140,23 @@ const AddWorkerPage = (data: any) => {
             type="text"
             defaultValue={props ? props.phone : ""}
             required
+          />
+          <TextField
+            style={{ paddingBottom: "20px" }}
+            color="primary"
+            id="outlined-basic"
+            label="Pozicija"
+            name="position"
+            type="text"
+            defaultValue={props ? props.position : ""}
+            required
+          />
+          <FormControlLabel
+            name="isAdmin"
+            control={<Checkbox />}
+            defaultChecked={props ? props.isAdmin : false}
+            label="Administratorius"
+            onChange={(_, checked) => handleCheckBox(checked)}
           />
           <Button color="primary" variant="contained" type="submit">
             {!props ? "Registruoti" : "Redaguoti"}

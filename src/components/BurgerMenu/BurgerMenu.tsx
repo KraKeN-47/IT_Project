@@ -23,8 +23,8 @@ const BurgerMenu: React.FC<Props> = (props: Props) => {
 
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-      {burgerMenuItems.map((props) => (
-        <MenuItem {...props} />
+      {burgerMenuItems.map((props, index) => (
+        <MenuItem key={index} {...props} />
       ))}
     </Menu>
   );

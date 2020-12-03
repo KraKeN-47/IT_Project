@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Select, MenuItem } from "@material-ui/core";
+import { Box, Button, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -6,38 +6,46 @@ import jwt from "jwt-decode";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
-import { setUserType } from "modules/userType/userData.slice";
+import { login } from "modules/userType/userData.slice";
 import { FormWrapper } from "components";
 
-const RegisterPage = () => {
+const RegisterPage: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [userName, setUserName] = useState("");
   const [name, setName] = useState("");
+  const [surName, setSurName] = useState("");
   const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPass, setRepeatPass] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const [socialSecNr, setSocialSecNr] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await api
-      .post("/Users", {
-        name,
-        email,
+    api
+      .post("/Auth/registerUser", {
+        userName,
+        vardas: name,
+        pavarde: surName,
+        pastas: email,
+        adresas: address,
         password,
+        asmensKodas: socialSecNr,
+        telefononr: phoneNumber,
       })
       .then((resp: any) => {
-        const data: any = jwt(resp.data.authToken);
-        alert("Vartotojas užregistruotas");
-        localStorage.setItem("token", resp.data.authToken);
+        const data: any = jwt(resp.data.token);
+        localStorage.setItem("token", resp.data.token);
         dispatch(
-          setUserType({
+          login({
             level: data.level,
             name: data.name,
             id: data.id,
           })
         );
-        history.push(paths.availableTimes);
+        history.push(paths.addPet);
+        alert("Vartotojas užregistruotas");
       })
       .catch((x) => alert(x.response.data));
   };
@@ -58,7 +66,8 @@ const RegisterPage = () => {
             color="primary"
             id="outlined-basic"
             label="Slapyvardis"
-            name="name"
+            name="userName"
+            onChange={(e) => setUserName(e.target.value)}
             required
           />
           <TextField
@@ -67,6 +76,7 @@ const RegisterPage = () => {
             id="outlined-basic"
             label="Vardas"
             name="name"
+            onChange={(e) => setName(e.target.value)}
             required
           />
           <TextField
@@ -74,7 +84,8 @@ const RegisterPage = () => {
             color="primary"
             id="outlined-basic"
             label="Pavardė"
-            name="name"
+            name="surname"
+            onChange={(e) => setSurName(e.target.value)}
             required
           />
           <TextField
@@ -83,6 +94,7 @@ const RegisterPage = () => {
             id="outlined-basic"
             label="El. Paštas"
             name="email"
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <TextField
@@ -90,7 +102,8 @@ const RegisterPage = () => {
             color="primary"
             id="outlined-basic"
             label="Adresas"
-            name="email"
+            name="address"
+            onChange={(e) => setAddress(e.target.value)}
             required
           />
           <TextField
@@ -100,6 +113,7 @@ const RegisterPage = () => {
             label="Slaptažodis"
             name="password"
             type="password"
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <TextField
@@ -109,6 +123,7 @@ const RegisterPage = () => {
             label="Pakartokite slaptažodį"
             name="repeatPassword"
             type="password"
+            onChange={(e) => setRepeatPass(e.target.value)}
             required
           />
           <TextField
@@ -116,8 +131,9 @@ const RegisterPage = () => {
             color="primary"
             id="outlined-basic"
             label="Asmens Kodas"
-            name="answer"
+            name="socialSecNr"
             type="text"
+            onChange={(e) => setSocialSecNr(e.target.value)}
             required
           />
           <TextField
@@ -125,8 +141,9 @@ const RegisterPage = () => {
             color="primary"
             id="outlined-basic"
             label="Telefono Nr."
-            name="answer"
+            name="phoneNumber"
             type="text"
+            onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
           <Button color="primary" variant="contained" type="submit">
