@@ -1,23 +1,30 @@
-import React, { useState } from "react";
-import { TextField, Box, Button } from "@material-ui/core";
+import React from "react";
+import { Box, Button } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import jwt from "jwt-decode";
+import * as Yup from "yup";
 
 import { login } from "modules/userType/userData.slice";
 import { api } from "global/variables";
 import { paths } from "router/paths";
-import { Link } from "react-router-dom";
-import { FormWrapper } from "components";
+import { FormWrapper, FormikForm, FormikTextField } from "components";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .required("Privalomas laukas")
+      .email("Netinkamas pašto adresas"),
+    password: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+  });
+
+  const handleSubmit = async (event: any) => {
+    const { email, password } = event;
     api
       .post("/Auth/login", { pastas: email, password })
       .then((resp) => {
@@ -52,30 +59,30 @@ const Login: React.FC = () => {
         textAlign="center"
       >
         <h2>Prisijungimas</h2>
-        <form onSubmit={handleSubmit} style={{ display: "grid" }}>
-          <TextField
-            id="outlined-basic"
-            label="El paštas"
+        <FormikForm
+          handleSubmit={handleSubmit}
+          validationSchema={validationSchema}
+          initialValues={{ email: "", password: "" }}
+        >
+          <FormikTextField
+            variant="filled"
+            label="El. paštas"
+            formikKey="email"
             name="email"
-            onChange={(event) => setEmail(event.target.value)}
             style={{ paddingBottom: "20px" }}
           />
-          <TextField
-            id="outlined-basic"
+          <FormikTextField
+            variant="filled"
             label="Slaptažodis"
+            formikKey="password"
             name="password"
-            type="password"
-            onChange={(event) => setPassword(event.target.value)}
             style={{ paddingBottom: "20px" }}
+            type="password"
           />
-          <Link style={{ marginLeft: "auto" }} to={paths.resetPassword}>
-            Pamiršau slaptažodį
-          </Link>
-          <br />
           <Button variant="contained" type="submit" color="primary">
             Prisijungti
           </Button>
-        </form>
+        </FormikForm>
       </Box>
     </FormWrapper>
   );

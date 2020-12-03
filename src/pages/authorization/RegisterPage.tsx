@@ -1,38 +1,84 @@
-import { Box, Button, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import { Box, Button } from "@material-ui/core";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import jwt from "jwt-decode";
+import * as Yup from "yup";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
 import { login } from "modules/userType/userData.slice";
-import { FormWrapper } from "components";
+import { FormWrapper, FormikForm, FormikTextField } from "components";
 
 const RegisterPage: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [userName, setUserName] = useState("");
-  const [name, setName] = useState("");
-  const [surName, setSurName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPass, setRepeatPass] = useState("");
-  const [socialSecNr, setSocialSecNr] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+
+  const validationSchema = Yup.object({
+    userName: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    vardas: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+    pavarde: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+    pastas: Yup.string()
+      .required("Privalomas laukas")
+      .email("Neteisingai įvestas el. paštas"),
+    adresas: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    password: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    repeatPassword: Yup.string()
+      .required("Privalomas laukas")
+      .oneOf([Yup.ref("password"), ""], "Slaptažodžiai nesutampa"),
+    asmensKodas: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai")
+      .length(11, "Asmens kodas turi 11 simbolių"),
+    telefononr: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai"),
+  });
+
+  const initialValues = {
+    userName: "",
+    vardas: "",
+    pavarde: "",
+    pastas: "",
+    adresas: "",
+    password: "",
+    repeatPassword: "",
+    asmensKodas: "",
+    telefononr: "",
+  };
+
+  const handleSubmit = (event: any) => {
+    const {
+      userName,
+      vardas,
+      pavarde,
+      pastas,
+      adresas,
+      password,
+      asmensKodas,
+      telefononr,
+    } = event;
+    console.log(event);
     api
       .post("/Auth/registerUser", {
         userName,
-        vardas: name,
-        pavarde: surName,
-        pastas: email,
-        adresas: address,
+        vardas,
+        pavarde,
+        pastas,
+        adresas,
         password,
-        asmensKodas: socialSecNr,
-        telefononr: phoneNumber,
+        asmensKodas,
+        telefononr,
       })
       .then((resp: any) => {
         const data: any = jwt(resp.data.token);
@@ -59,97 +105,59 @@ const RegisterPage: React.FC = () => {
         padding="20px"
         textAlign="center"
       >
-        <h2>Registracija</h2>
-        <form style={{ display: "grid" }} onSubmit={handleSubmit}>
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+        <FormikForm
+          handleSubmit={handleSubmit}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+        >
+          <FormikTextField
+            formikKey="userName"
+            variant="filled"
             label="Slapyvardis"
-            name="userName"
-            onChange={(e) => setUserName(e.target.value)}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Vardas"
-            name="name"
-            onChange={(e) => setName(e.target.value)}
-            required
+          <FormikTextField formikKey="vardas" variant="filled" label="Vardas" />
+          <FormikTextField
+            formikKey="pavarde"
+            variant="filled"
+            label="Pavarde"
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Pavardė"
-            name="surname"
-            onChange={(e) => setSurName(e.target.value)}
-            required
+          <FormikTextField
+            formikKey="pastas"
+            variant="filled"
+            label="El. paštas"
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="El. Paštas"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+          <FormikTextField
+            formikKey="adresas"
+            variant="filled"
             label="Adresas"
-            name="address"
-            onChange={(e) => setAddress(e.target.value)}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+          <FormikTextField
+            formikKey="password"
+            type="password"
+            variant="filled"
             label="Slaptažodis"
-            name="password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+          <FormikTextField
+            formikKey="repeatPassword"
+            type="password"
+            variant="filled"
             label="Pakartokite slaptažodį"
-            name="repeatPassword"
-            type="password"
-            onChange={(e) => setRepeatPass(e.target.value)}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Asmens Kodas"
-            name="socialSecNr"
-            type="text"
-            onChange={(e) => setSocialSecNr(e.target.value)}
-            required
+          <FormikTextField
+            formikKey="asmensKodas"
+            variant="filled"
+            inputProps={{ maxLength: 11 }}
+            label="Asmens kodas"
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Telefono Nr."
-            name="phoneNumber"
-            type="text"
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required
+          <FormikTextField
+            formikKey="telefononr"
+            variant="filled"
+            label="Telefono numeris"
           />
           <Button color="primary" variant="contained" type="submit">
             Registruotis
           </Button>
-        </form>
+        </FormikForm>
       </Box>
     </FormWrapper>
   );

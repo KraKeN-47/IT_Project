@@ -13,6 +13,7 @@ const FormWrapper: React.FC = (props) => {
         top: 0,
         right: 0,
         left: 0,
+        marginTop: "5%",
       }}
     >
       {props.children}

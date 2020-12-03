@@ -1,4 +1,5 @@
 export enum paths {
+  test = "/test",
   home = "/",
   availableTimes = "/available-items",
   reservedTimes = "/reserved-items",
