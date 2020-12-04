@@ -89,6 +89,7 @@ const InventoryPage = (data: any) => {
             label="Laisvi vnt."
             name="free"
             defaultValue={props ? props.free : ""}
+            disabled={props ? true : false}
             required
           />
           <TextField
@@ -98,6 +99,7 @@ const InventoryPage = (data: any) => {
             label="Galioja nuo"
             name="from"
             defaultValue={props ? props.from : ""}
+            disabled={props ? true : false}
             required
           />
           <TextField
@@ -107,6 +109,7 @@ const InventoryPage = (data: any) => {
             label="Galioja iki"
             name="to"
             defaultValue={props ? props.to : ""}
+            disabled={props ? true : false}
             required
           />
           <Button color="primary" variant="contained" type="submit">
