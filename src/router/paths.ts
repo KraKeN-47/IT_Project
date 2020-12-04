@@ -29,6 +29,4 @@ export enum paths {
   addInventory = "/addInventory",
   editInventory = "/editInventory",
   reserveInventory = "/reserveInventory",
-  // Clients crud
-  clients = "/clients",
 }

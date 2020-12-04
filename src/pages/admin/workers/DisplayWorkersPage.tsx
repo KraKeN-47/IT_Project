@@ -52,7 +52,7 @@ export default function DisplayWorkersPage() {
   return (
     <FormWrapper>
       <Box
-        width="50%"
+        width="60%"
         style={{ background: "tan" }}
         borderRadius="20px"
         padding="20px"
@@ -76,7 +76,7 @@ export default function DisplayWorkersPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {workers.map(worker => (
+              {workers.map((worker) => (
                 <TableRow key={worker.id}>
                   <TableCell align="center">{worker.vardas}</TableCell>
                   <TableCell align="center">{worker.pavarde}</TableCell>
@@ -85,7 +85,9 @@ export default function DisplayWorkersPage() {
                   <TableCell align="center">{worker.pastas}</TableCell>
                   <TableCell align="center">{worker.telefonoNr}</TableCell>
                   <TableCell align="center">{worker.pozicija}</TableCell>
-                  <TableCell align="center">{worker.isAdmin ? "Yes" : "No"}</TableCell>
+                  <TableCell align="center">
+                    {worker.isAdmin ? "Yes" : "No"}
+                  </TableCell>
                   <TableCell align="center">
                     <NavLink
                       to={{

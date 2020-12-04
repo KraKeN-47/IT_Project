@@ -65,14 +65,6 @@ export const burgerMenuItemsData = ({
   {
     onClick: () => {
       handleClose();
-      location.pathname !== paths.clients && history.push(paths.clients);
-    },
-    children: "Klientai",
-    level: 2,
-  },
-  {
-    onClick: () => {
-      handleClose();
       location.pathname !== paths.userServices &&
         history.push(paths.userServices);
     },

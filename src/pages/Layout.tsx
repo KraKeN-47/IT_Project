@@ -5,13 +5,17 @@ import {
   Button,
   IconButton,
   Toolbar,
+  Typography,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-import { selectUserTypeState } from "modules/userType/userData.selector";
+import {
+  selectUserName,
+  selectUserTypeState,
+} from "modules/userType/userData.selector";
 import { logout } from "modules/userType/userData.slice";
 import { paths } from "router/paths";
 import { ArrowBackIos } from "@material-ui/icons";
@@ -26,6 +30,7 @@ const Layout = ({ children }: any) => {
   ] = React.useState<null | HTMLElement>(null);
   const openProfile = Boolean(profileAnchorEl);
   const imagePath = useSelector(selectImagePath());
+  const userName = useSelector(selectUserName());
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(
     null
   );
@@ -36,7 +41,6 @@ const Layout = ({ children }: any) => {
 
   const userData = useSelector(selectUserTypeState);
   const history = useHistory();
-  const location = useLocation();
 
   const dispatch = useDispatch();
   const handleProfileClose = () => {
@@ -67,19 +71,35 @@ const Layout = ({ children }: any) => {
             handleClose={handleMenuClose}
             open={openMenu}
           />
+
           <IconButton onClick={handleGoBack}>
             <ArrowBackIos style={{ color: "tan" }} />
           </IconButton>
-          <Box ml="auto">
+          {userData.level > 0 && (
+            <Typography
+              style={{
+                alignSelf: "center",
+                fontFamily: "cursive",
+                margin: "auto",
+              }}
+              variant="h6"
+            >
+              {userName}
+            </Typography>
+          )}
+
+          <Box ml="auto" display="flex">
             {userData.level > 0 && (
-              <Button
-                size="medium"
-                variant="outlined"
-                style={{ color: "white", borderColor: "white" }}
-                onClick={handleLogout}
-              >
-                Atsijungti
-              </Button>
+              <Box alignSelf="center">
+                <Button
+                  size="medium"
+                  variant="outlined"
+                  style={{ color: "white", borderColor: "white" }}
+                  onClick={handleLogout}
+                >
+                  Atsijungti
+                </Button>
+              </Box>
             )}
             {userData.level > 0 && (
               <IconButton

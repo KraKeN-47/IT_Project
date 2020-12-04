@@ -10,3 +10,6 @@ export const selectUserTypeLevel = () =>
 
 export const selectUserId = () =>
   createSelector(selectUserTypeState, (state) => state.id);
+
+export const selectUserName = () =>
+  createSelector(selectUserTypeState, (state) => state.name);
