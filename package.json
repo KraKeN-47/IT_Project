@@ -19,6 +19,7 @@
     "axios": "^0.21.0",
     "connected-react-router": "^6.8.0",
     "formik": "^2.2.5",
+    "formik-material-fields": "0.0.6",
     "jwt-decode": "^3.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
