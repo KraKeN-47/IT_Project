@@ -26,11 +26,16 @@ const BurgerMenu: React.FC<Props> = (props: Props) => {
 
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-      {burgerMenuItems
-        .filter((item) => item.level <= userLevel)
-        .map((props, index) => (
-          <MenuItem key={index} {...props} />
-        ))}
+      {userLevel > -1 &&
+        burgerMenuItems
+          .filter((item) => item.level <= userLevel)
+          .filter((item) => item.name !== "login")
+          .filter((item) => item.name !== "register")
+          .map((props, index) => <MenuItem key={index} {...props} />)}
+      {userLevel === -1 &&
+        burgerMenuItems
+          .filter((item) => item.level <= userLevel)
+          .map((props, index) => <MenuItem key={index} {...props} />)}
     </Menu>
   );
 };

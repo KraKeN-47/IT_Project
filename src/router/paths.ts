@@ -28,4 +28,5 @@ export enum paths {
   inventory = "/inventory",
   addInventory = "/addInventory",
   editInventory = "/editInventory",
+  reserveInventory = "/reserveInventory",
 }

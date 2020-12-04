@@ -1,56 +1,82 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-} from "@material-ui/core";
+import { Box, Button, Checkbox, FormControlLabel } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import jwt from "jwt-decode";
+import * as Yup from "yup";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
-import { FormWrapper } from "components";
+import { FormikForm, FormikTextField, FormWrapper } from "components";
 
 const AddWorkerPage = (data: any) => {
   const props = data.location.state ? data.location.state.props : null;
   const history = useHistory();
-  const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPass, setRepeatPass] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // await api
-    //   .post("/Users", {
-    //     name,
-    //     email,
-    //     password,
-    //   })
-    //   .then((resp: any) => {
-    //     const data: any = jwt(resp.data.authToken);
-    //     alert("Vartotojas užregistruotas");
-    //     localStorage.setItem("token", resp.data.authToken);
-    //     dispatch(
-    //       setUserType({
-    //         level: data.level,
-    //         name: data.name,
-    //         id: data.id,
-    //       })
-    //     );
-    //     history.push(paths.availableTimes);
-    //   })
-    //   .catch((x) => alert(x.response.data));
+
+  const initialValues = {
+    name: props ? props.name : "",
+    surname: props ? props.surname : "",
+    email: props ? props.email : "",
+    address: props ? props.address : "",
+    password: props ? props.password : "",
+    repeatPassword: props ? props.repeatPassword : "",
+    socialNr: props ? props.socialNr : "",
+    phoneNr: props ? props.phone : "",
+    position: props ? props.position : "",
+  };
+  const handleSubmit = async (e: any) => {
+    await api
+      .post("/Auth/registerWorker", {
+        vardas: e.name,
+        pavarde: e.surname,
+        adresas: e.address,
+        password: e.password,
+        asmensKodas: e.socialNr,
+        userName: "",
+        pastas: e.email,
+        telefonoNr: e.phoneNr,
+        pozicija: e.position,
+        isAdmin: isAdmin,
+      })
+      .then((resp) => {
+        alert("Darbuotojas sukurtas.");
+        history.push(paths.workers);
+      })
+      .catch((err) => alert("Serverio klaida"));
   };
   const handleCheckBox = (checked: boolean) => {
     setIsAdmin(checked);
   };
+
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    surname: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+    email: Yup.string()
+      .required("Privalomas laukas")
+      .email("Neteisingai įvestas el. paštas"),
+    address: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    password: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    repeatPassword: Yup.string()
+      .required("Privalomas laukas")
+      .oneOf([Yup.ref("password"), ""], "Slaptažodžiai nesutampa"),
+    socialNr: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai")
+      .length(11, "Asmens kodas turi 11 simbolių"),
+    phoneNr: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai"),
+    position: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+  });
   return (
     <FormWrapper>
       <Box
@@ -60,96 +86,63 @@ const AddWorkerPage = (data: any) => {
         padding="20px"
         textAlign="center"
       >
-        <h2>{!props ? "Darbuotojo registracija" : "Darbuotojo redagavimas"}</h2>
-        <form style={{ display: "grid" }} onSubmit={handleSubmit}>
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Vardas"
-            name="name"
-            defaultValue={props ? props.name : ""}
-            required
-          />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+        <FormikForm
+          initialValues={initialValues}
+          handleSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
+          <h2>
+            {!props ? "Darbuotojo registracija" : "Darbuotojo redagavimas"}
+          </h2>
+          <FormikTextField formikKey="name" variant="filled" label="Vardas" />
+          <FormikTextField
+            formikKey="surname"
+            variant="filled"
             label="Pavardė"
-            name="surname"
-            defaultValue={props ? props.surname : ""}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="El. Paštas"
-            name="email"
-            defaultValue={props ? props.email : ""}
-            required
+          <FormikTextField
+            formikKey="email"
+            variant="filled"
+            label="El. paštas"
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+          <FormikTextField
+            formikKey="address"
+            variant="filled"
             label="Adresas"
-            name="address"
-            defaultValue={props ? props.address : ""}
-            required
           />
           {!props && (
-            <TextField
-              style={{ paddingBottom: "20px" }}
-              color="primary"
-              id="outlined-basic"
+            <FormikTextField
+              formikKey="password"
+              variant="filled"
               label="Slaptažodis"
-              name="password"
               type="password"
-              defaultValue={props ? props.name : ""}
-              required
             />
           )}
           {!props && (
-            <TextField
-              style={{ paddingBottom: "20px" }}
-              color="primary"
-              id="outlined-basic"
+            <FormikTextField
+              formikKey="repeatPassword"
+              variant="filled"
               label="Pakartokite slaptažodį"
-              name="repeatPassword"
               type="password"
-              required
             />
           )}
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Asmens Kodas"
-            name="socialNr"
-            type="text"
-            defaultValue={props ? props.socialNr : ""}
-            required
+          <FormikTextField
+            formikKey="socialNr"
+            variant="filled"
+            label="Asmens kodas"
+            inputProps={{
+              maxLength: 11,
+            }}
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Telefono Nr."
-            name="phoneNr"
-            type="text"
-            defaultValue={props ? props.phone : ""}
-            required
+          <FormikTextField
+            formikKey="phoneNr"
+            variant="filled"
+            label="Telefono nr."
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Pozicija"
-            name="position"
-            type="text"
-            defaultValue={props ? props.position : ""}
-            required
+          <FormikTextField
+            formikKey="position"
+            variant="filled"
+            label="Pareigos"
           />
           <FormControlLabel
             name="isAdmin"
@@ -161,7 +154,16 @@ const AddWorkerPage = (data: any) => {
           <Button color="primary" variant="contained" type="submit">
             {!props ? "Registruoti" : "Redaguoti"}
           </Button>
-        </form>
+        </FormikForm>
+        {/* <form style={{ display: "grid" }} onSubmit={handleSubmit}>
+          <FormControlLabel
+            name="isAdmin"
+            control={<Checkbox />}
+            defaultChecked={props ? props.isAdmin : false}
+            label="Administratorius"
+            onChange={(_, checked) => handleCheckBox(checked)}
+          />
+        </form> */}
       </Box>
     </FormWrapper>
   );
