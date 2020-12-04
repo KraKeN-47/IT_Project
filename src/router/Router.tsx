@@ -22,6 +22,7 @@ import {
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
+import DisplayUsersPage from "pages/admin/users/DisplayUsersPage";
 
 const Router = () => (
   <BrowserRouter>
@@ -80,6 +81,12 @@ export const routes: Routes[] = [
     component: DisplayWorkersPage,
     userLevel: 3,
     protected: true,
+  },
+  {
+    path: paths.users,
+    component: DisplayUsersPage,
+    userLevel: 2,
+    protected: true
   },
   {
     path: paths.addWorker,

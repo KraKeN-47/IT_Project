@@ -20,28 +20,50 @@ const AddWorkerPage = (data: any) => {
     password: props ? props.password : "",
     repeatPassword: props ? props.repeatPassword : "",
     socialNr: props ? props.socialNr : "",
-    phoneNr: props ? props.phone : "",
+    phoneNr: props ? props.phoneNr : "",
     position: props ? props.position : "",
   };
   const handleSubmit = async (e: any) => {
-    await api
-      .post("/Auth/registerWorker", {
-        vardas: e.name,
-        pavarde: e.surname,
-        adresas: e.address,
-        password: e.password,
-        asmensKodas: e.socialNr,
-        userName: "",
-        pastas: e.email,
-        telefonoNr: e.phoneNr,
-        pozicija: e.position,
-        isAdmin: isAdmin,
-      })
-      .then((resp) => {
-        alert("Darbuotojas sukurtas.");
-        history.push(paths.workers);
-      })
-      .catch((err) => alert("Serverio klaida"));
+    console.log(e);
+    if (props) {
+      await api
+        .put(`/Auth/updateWorker/${props.id}`, {
+          vardas: e.name,
+          pavarde: e.surname,
+          adresas: e.address,
+          password: "",
+          asmensKodas: e.socialNr,
+          userName: "",
+          pastas: e.email,
+          telefonoNr: e.phoneNr,
+          pozicija: e.position,
+          isAdmin: isAdmin,
+        })
+        .then(() => {
+          alert("Darbuotojas redaguotas.");
+          history.push(paths.workers);
+        })
+        .catch(() => alert("Serverio klaida"));
+    } else {
+      await api
+        .post("/Auth/registerWorker", {
+          vardas: e.name,
+          pavarde: e.surname,
+          adresas: e.address,
+          password: e.password,
+          asmensKodas: e.socialNr,
+          userName: "",
+          pastas: e.email,
+          telefonoNr: e.phoneNr,
+          pozicija: e.position,
+          isAdmin: isAdmin,
+        })
+        .then(() => {
+          alert("Darbuotojas sukurtas.");
+          history.push(paths.workers);
+        })
+        .catch(() => alert("Serverio klaida"));
+    }
   };
   const handleCheckBox = (checked: boolean) => {
     setIsAdmin(checked);
@@ -77,6 +99,30 @@ const AddWorkerPage = (data: any) => {
       .required("Privalomas laukas")
       .min(2, "Mažiausiai 2 simboliai"),
   });
+  const validationSchema1 = Yup.object({
+    name: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    surname: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+    email: Yup.string()
+      .required("Privalomas laukas")
+      .email("Neteisingai įvestas el. paštas"),
+    address: Yup.string()
+      .required("Privalomas laukas")
+      .min(5, "Mažiausiai 5 simboliai"),
+    socialNr: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai")
+      .length(11, "Asmens kodas turi 11 simbolių"),
+    phoneNr: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai"),
+    position: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+  });
   return (
     <FormWrapper>
       <Box
@@ -89,7 +135,7 @@ const AddWorkerPage = (data: any) => {
         <FormikForm
           initialValues={initialValues}
           handleSubmit={handleSubmit}
-          validationSchema={validationSchema}
+          validationSchema={props ? validationSchema1 : validationSchema}
         >
           <h2>
             {!props ? "Darbuotojo registracija" : "Darbuotojo redagavimas"}
@@ -146,8 +192,9 @@ const AddWorkerPage = (data: any) => {
           />
           <FormControlLabel
             name="isAdmin"
-            control={<Checkbox />}
-            defaultChecked={props ? props.isAdmin : false}
+            control={
+              <Checkbox defaultChecked={props ? props.isAdmin : false} />
+            }
             label="Administratorius"
             onChange={(_, checked) => handleCheckBox(checked)}
           />
