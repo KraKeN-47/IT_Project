@@ -24,6 +24,8 @@ export enum paths {
   workers = "/workers",
   addWorker = "/addWorker",
   editWorker = "/editWorker",
+  allReports = "/allReports",
+  singleReport = "/singleReport",
   // Inventory crud
   inventory = "/inventory",
   addInventory = "/addInventory",

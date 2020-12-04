@@ -19,6 +19,8 @@ import {
   ReserveServicePage,
   AvatarOptionsPage,
   ReserveInventoryPage,
+  AllReportsPage,
+  SingleReportPage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -86,7 +88,7 @@ export const routes: Routes[] = [
     path: paths.users,
     component: DisplayUsersPage,
     userLevel: 2,
-    protected: true
+    protected: true,
   },
   {
     path: paths.addWorker,
@@ -150,6 +152,18 @@ export const routes: Routes[] = [
     path: paths.reserveInventory,
     component: ReserveInventoryPage,
     userLevel: 2,
+    protected: true,
+  },
+  {
+    path: paths.allReports,
+    component: AllReportsPage,
+    userLevel: 3,
+    protected: true,
+  },
+  {
+    path: paths.singleReport,
+    component: SingleReportPage,
+    userLevel: 3,
     protected: true,
   },
 ];

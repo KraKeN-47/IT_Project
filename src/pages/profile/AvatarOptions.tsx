@@ -20,6 +20,7 @@ export default function AvatarOptionsPage() {
     try {
       const resp = await api.delete(`/Picture/delete/${userId}`);
       alert(resp.data.message);
+      window.location.reload();
     } catch (error) {
       alert("Serverio klaida");
     }

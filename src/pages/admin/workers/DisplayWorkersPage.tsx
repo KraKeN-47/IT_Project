@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Fab,
   IconButton,
   Paper,
@@ -9,6 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
@@ -20,6 +22,7 @@ import { FormWrapper } from "components";
 import { useHistory } from "react-router";
 import { paths } from "router/paths";
 import { api } from "global/variables";
+import WorkerReport from "./WorkerReport";
 
 export default function DisplayWorkersPage() {
   const history = useHistory();
@@ -27,8 +30,8 @@ export default function DisplayWorkersPage() {
     history.push(paths.addWorker);
   };
   const [workers, setWorkers] = useState<any>([]);
-  const getWorkers = () => {
-    api
+  const getWorkers = async () => {
+    const resp = await api
       .get("/Client/workers")
       .then((resp: any) => {
         const data: any = resp.data;
@@ -36,6 +39,7 @@ export default function DisplayWorkersPage() {
       })
       .catch((x) => alert(x.response.data));
   };
+
   useEffect(() => {
     getWorkers();
   }, []);
@@ -49,6 +53,15 @@ export default function DisplayWorkersPage() {
       })
       .catch((x) => alert(x.response.data));
   };
+
+  const handleAllReportRedirect = () => {
+    history.push(paths.allReports);
+  };
+
+  const handleSingleReportRedirect = () => {
+    history.push(paths.singleReport);
+  };
+
   return (
     <FormWrapper>
       <Box
@@ -59,6 +72,15 @@ export default function DisplayWorkersPage() {
         textAlign="center"
       >
         <h2>Darbuotojų lentelė</h2>
+        <Box display="flex" justifyContent="space-evenly" mb="20px">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleAllReportRedirect}
+          >
+            Pozicijų ataskaita
+          </Button>
+        </Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -76,50 +98,57 @@ export default function DisplayWorkersPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {workers.map((worker) => (
-                <TableRow key={worker.id}>
-                  <TableCell align="center">{worker.vardas}</TableCell>
-                  <TableCell align="center">{worker.pavarde}</TableCell>
-                  <TableCell align="center">{worker.adresas}</TableCell>
-                  <TableCell align="center">{worker.asmensKodas}</TableCell>
-                  <TableCell align="center">{worker.pastas}</TableCell>
-                  <TableCell align="center">{worker.telefonoNr}</TableCell>
-                  <TableCell align="center">{worker.pozicija}</TableCell>
-                  <TableCell align="center">
-                    {worker.isAdmin ? "Yes" : "No"}
-                  </TableCell>
-                  <TableCell align="center">
-                    <NavLink
-                      to={{
-                        pathname: paths.editWorker,
-                        state: {
-                          props: {
-                            id: worker.id,
-                            name: worker.vardas,
-                            surname: worker.pavarde,
-                            email: worker.pastas,
-                            address: worker.adresas,
-                            socialNr: worker.asmensKodas,
-                            phoneNr: worker.telefonoNr,
-                            position: worker.pozicija,
-                            isAdmin: worker.isAdmin,
+              {workers.map((worker: any) => (
+                <Tooltip
+                  key={worker.id}
+                  placement="left"
+                  arrow
+                  title={<WorkerReport worker={worker} />}
+                >
+                  <TableRow>
+                    <TableCell align="center">{worker.vardas}</TableCell>
+                    <TableCell align="center">{worker.pavarde}</TableCell>
+                    <TableCell align="center">{worker.adresas}</TableCell>
+                    <TableCell align="center">{worker.asmensKodas}</TableCell>
+                    <TableCell align="center">{worker.pastas}</TableCell>
+                    <TableCell align="center">{worker.telefonoNr}</TableCell>
+                    <TableCell align="center">{worker.pozicija}</TableCell>
+                    <TableCell align="center">
+                      {worker.isAdmin ? "Yes" : "No"}
+                    </TableCell>
+                    <TableCell align="center">
+                      <NavLink
+                        to={{
+                          pathname: paths.editWorker,
+                          state: {
+                            props: {
+                              id: worker.id,
+                              name: worker.vardas,
+                              surname: worker.pavarde,
+                              email: worker.pastas,
+                              address: worker.adresas,
+                              socialNr: worker.asmensKodas,
+                              phoneNr: worker.telefonoNr,
+                              position: worker.pozicija,
+                              isAdmin: worker.isAdmin,
+                            },
+                            loading: true,
                           },
-                          loading: true,
-                        },
-                      }}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Fab size="small">
-                        <EditIcon />
-                      </Fab>
-                    </NavLink>
-                  </TableCell>
-                  <TableCell align="center">
-                    <IconButton onClick={() => removeWorker(worker.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                        }}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Fab size="small">
+                          <EditIcon />
+                        </Fab>
+                      </NavLink>
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => removeWorker(worker.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </Tooltip>
               ))}
             </TableBody>
           </Table>

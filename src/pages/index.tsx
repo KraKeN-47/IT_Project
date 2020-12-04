@@ -14,3 +14,5 @@ export { default as ServicesPage } from "./admin/services/ServicesPage";
 export { default as ReserveServicePage } from "./user/ReserveServicePage";
 export { default as AvatarOptionsPage } from "./profile/AvatarOptions";
 export { default as ReserveInventoryPage } from "./admin/inventory/ReserveInventoryPage";
+export { default as AllReportsPage } from "./admin/workers/AllReportsPage";
+export { default as SingleReportPage } from "./admin/workers/SingleReportPage";
