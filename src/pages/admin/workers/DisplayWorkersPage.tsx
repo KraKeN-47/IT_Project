@@ -76,7 +76,7 @@ export default function DisplayWorkersPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {workers.map((worker) => (
+              {workers.map(worker => (
                 <TableRow key={worker.id}>
                   <TableCell align="center">{worker.vardas}</TableCell>
                   <TableCell align="center">{worker.pavarde}</TableCell>
