@@ -1,6 +1,6 @@
 import {
   Box,
-  Fab,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -8,30 +8,20 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { NavLink } from "react-router-dom";
 
 import { FormWrapper } from "components";
-import { useHistory } from "react-router";
-import { paths } from "router/paths";
-import { useSelector } from "react-redux";
-import { selectUserId } from "modules/userType/userData.selector";
 import { api } from "global/variables";
+import UserPets from "./UserPets";
 
 export default function DisplayUsersPage() {
-  const history = useHistory();
-  const handleRedirectAddWorker = () => {
-    history.push(paths.addWorker);
-  };
   const [users, setUsers] = useState<any>([]);
-  const id: any = useSelector(selectUserId());
   const getUsers = () => {
     api
-      .get("/Client")
+      .get("/Client/clients")
       .then((resp: any) => {
         const data: any = resp.data;
         setUsers(data);
@@ -44,13 +34,14 @@ export default function DisplayUsersPage() {
 
   const removeUser = (id: any) => {
     api
-      .delete(`/User/${id}`)
+      .delete(`/Auth/deleteUser/${id}`)
       .then(() => {
-        alert("Gyvunas istrintas");
+        alert("Klientas istrintas");
         getUsers();
       })
       .catch((x) => alert(x.response.data));
   };
+
   return (
     <FormWrapper>
       <Box
@@ -69,7 +60,6 @@ export default function DisplayUsersPage() {
                 <TableCell align="center">Pavardė</TableCell>
                 <TableCell align="center">Adresas</TableCell>
                 <TableCell align="center">El. paštas</TableCell>
-                <TableCell align="center">Asmens kodas</TableCell>
                 <TableCell align="center">Telefono nr.</TableCell>
                 <TableCell align="center"></TableCell>
                 <TableCell align="center"></TableCell>
@@ -77,53 +67,24 @@ export default function DisplayUsersPage() {
             </TableHead>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell align="center">{user.vardas}</TableCell>
-                  <TableCell align="center">Pavardė</TableCell>
-                  <TableCell align="center">Adresas</TableCell>
-                  <TableCell align="center">El. paštas</TableCell>
-                  <TableCell align="center">Asmens kodas</TableCell>
-                  <TableCell align="center">Telefono nr.</TableCell>
-                  <TableCell align="center">
-                    <NavLink
-                      to={{
-                        pathname: paths.editWorker,
-                        state: {
-                          props: {
-                            name: "Vardas",
-                            surname: "Pavardė",
-                            email: "El. Paštas",
-                            address: "Adresas",
-                            phone: "Telefono nr",
-                            socialNr: "Asmens kodas",
-                            position: "Tevas",
-                            isAdmin: true,
-                          },
-                          loading: true,
-                        },
-                      }}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Fab size="small">
-                        <EditIcon />
-                      </Fab>
-                    </NavLink>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Fab size="small">
-                      <DeleteIcon />
-                    </Fab>
-                  </TableCell>
-                </TableRow>
+                <Tooltip key={user.id} placement="left" arrow title={<UserPets pets={user.pets} />}>
+                  <TableRow>
+                    <TableCell align="center">{user.vardas}</TableCell>
+                    <TableCell align="center">{user.pavarde}</TableCell>
+                    <TableCell align="center">{user.adresas}</TableCell>
+                    <TableCell align="center">{user.pastas}</TableCell>
+                    <TableCell align="center">{user.telefonoNr}</TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => removeUser(user.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </Tooltip>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <Box mt="20px">
-          <Fab color="primary" onClick={handleRedirectAddWorker}>
-            <AddIcon />
-          </Fab>
-        </Box>
       </Box>
     </FormWrapper>
   );

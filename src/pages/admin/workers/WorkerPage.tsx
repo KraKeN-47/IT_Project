@@ -6,9 +6,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import jwt from "jwt-decode";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
@@ -17,36 +15,92 @@ import { FormWrapper } from "components";
 const AddWorkerPage = (data: any) => {
   const props = data.location.state ? data.location.state.props : null;
   const history = useHistory();
-  const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(props ? props.name : "");
+  const [surname, setSurname] = useState(props ? props.surname : "");
+  const [email, setEmail] = useState(props ? props.email : "");
   const [password, setPassword] = useState("");
   const [repeatPass, setRepeatPass] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // await api
-    //   .post("/Users", {
-    //     name,
-    //     email,
-    //     password,
-    //   })
-    //   .then((resp: any) => {
-    //     const data: any = jwt(resp.data.authToken);
-    //     alert("Vartotojas užregistruotas");
-    //     localStorage.setItem("token", resp.data.authToken);
-    //     dispatch(
-    //       setUserType({
-    //         level: data.level,
-    //         name: data.name,
-    //         id: data.id,
-    //       })
-    //     );
-    //     history.push(paths.availableTimes);
-    //   })
-    //   .catch((x) => alert(x.response.data));
+  const [socialNr, setSocialNr] = useState(props ? props.socialNr : "");
+  const [phoneNr, setPhoneNr] = useState(props ? props.phoneNr : "");
+  const [address, setAddress] = useState(props ? props.address : "");
+  const [position, setPosition] = useState(props ? props.position : "");
+  const [isAdmin, setIsAdmin] = useState(props ? props.isAdmin : false);
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    const input = e.target.name;
+    const value = e.target.value;
+    switch (input) {
+      case "name": {
+        setName(value);
+        break;
+      }
+      case "surname": {
+        setSurname(value);
+        break;
+      }
+      case "email": {
+        setEmail(value);
+        break;
+      }
+      case "password": {
+        setPassword(value);
+        break;
+      }
+      case "repeatPassword": {
+        setRepeatPass(value);
+        break;
+      }
+      case "socialNr": {
+        setSocialNr(value);
+        break;
+      }
+      case "phoneNr": {
+        setPhoneNr(value);
+        break;
+      }
+      case "address": {
+        setAddress(value);
+        break;
+      }
+      case "position": {
+        setPosition(value);
+        break;
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    const data = {
+      vardas: name,
+      pavarde: surname,
+      pastas: email,
+      adresas: address,
+      asmensKodas: socialNr,
+      telefonoNr: phoneNr,
+      pozicija: position,
+      password,
+      isAdmin,
+    };
+    if (props) {
+      console.log(data);
+
+      api
+        .put(`/Auth/updateWorker/${props.id}`, data)
+        .then(() => {
+          alert("Darbuotojas redaguotas");
+          history.push(paths.workers);
+        })
+        .catch((x) => alert(x.response));
+    } else {
+      api
+        .post("/Auth/registerWorker", data)
+        .then(() => {
+          alert("Darbuotojas užregistruotas");
+          //history.push(paths.workers);
+        })
+        .catch((x) => alert(x.response.data));
+    }
   };
   const handleCheckBox = (checked: boolean) => {
     setIsAdmin(checked);
@@ -60,15 +114,17 @@ const AddWorkerPage = (data: any) => {
         padding="20px"
         textAlign="center"
       >
+        {props && console.log(props.id)}
         <h2>{!props ? "Darbuotojo registracija" : "Darbuotojo redagavimas"}</h2>
-        <form style={{ display: "grid" }} onSubmit={handleSubmit}>
+        <form style={{ display: "grid" }} onSubmit={handleSubmit} noValidate>
           <TextField
             style={{ paddingBottom: "20px" }}
             color="primary"
             id="outlined-basic"
             label="Vardas"
             name="name"
-            defaultValue={props ? props.name : ""}
+            value={name}
+            onChange={handleChange}
             required
           />
           <TextField
@@ -77,7 +133,8 @@ const AddWorkerPage = (data: any) => {
             id="outlined-basic"
             label="Pavardė"
             name="surname"
-            defaultValue={props ? props.surname : ""}
+            value={surname}
+            onChange={handleChange}
             required
           />
           <TextField
@@ -86,7 +143,8 @@ const AddWorkerPage = (data: any) => {
             id="outlined-basic"
             label="El. Paštas"
             name="email"
-            defaultValue={props ? props.email : ""}
+            value={email}
+            onChange={handleChange}
             required
           />
           <TextField
@@ -95,7 +153,8 @@ const AddWorkerPage = (data: any) => {
             id="outlined-basic"
             label="Adresas"
             name="address"
-            defaultValue={props ? props.address : ""}
+            value={address}
+            onChange={handleChange}
             required
           />
           {!props && (
@@ -106,7 +165,8 @@ const AddWorkerPage = (data: any) => {
               label="Slaptažodis"
               name="password"
               type="password"
-              defaultValue={props ? props.name : ""}
+              value={password}
+              onChange={handleChange}
               required
             />
           )}
@@ -117,6 +177,8 @@ const AddWorkerPage = (data: any) => {
               id="outlined-basic"
               label="Pakartokite slaptažodį"
               name="repeatPassword"
+              value={repeatPass}
+              onChange={handleChange}
               type="password"
               required
             />
@@ -128,7 +190,8 @@ const AddWorkerPage = (data: any) => {
             label="Asmens Kodas"
             name="socialNr"
             type="text"
-            defaultValue={props ? props.socialNr : ""}
+            value={socialNr}
+            onChange={handleChange}
             required
           />
           <TextField
@@ -138,7 +201,8 @@ const AddWorkerPage = (data: any) => {
             label="Telefono Nr."
             name="phoneNr"
             type="text"
-            defaultValue={props ? props.phone : ""}
+            value={phoneNr}
+            onChange={handleChange}
             required
           />
           <TextField
@@ -148,13 +212,13 @@ const AddWorkerPage = (data: any) => {
             label="Pozicija"
             name="position"
             type="text"
-            defaultValue={props ? props.position : ""}
+            value={position}
+            onChange={handleChange}
             required
           />
           <FormControlLabel
             name="isAdmin"
-            control={<Checkbox />}
-            defaultChecked={props ? props.isAdmin : false}
+            control={<Checkbox value={isAdmin} defaultChecked={isAdmin} />}
             label="Administratorius"
             onChange={(_, checked) => handleCheckBox(checked)}
           />
