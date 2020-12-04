@@ -1,45 +1,82 @@
-import { Box, Button, TextField } from "@material-ui/core";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { Box, Button } from "@material-ui/core";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import jwt from "jwt-decode";
+import * as Yup from "yup";
 
 import { api } from "global/variables";
 import { paths } from "router/paths";
-import { FormWrapper } from "components";
+import { FormikForm, FormikTextField, FormWrapper } from "components";
 
 const InventoryPage = (data: any) => {
   const props = data.location.state ? data.location.state.props : null;
+
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Privalomas laukas")
+      .min(2, "Mažiausiai 2 simboliai"),
+    amount: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai"),
+    cabinet: Yup.string()
+      .required("Privalomas laukas")
+      .min(1, "Mažiausiai 1 simbolis"),
+    free: Yup.string()
+      .required("Privalomas laukas")
+      .matches(/^[0-9]*$/, "Tik skaičiai"),
+    from: Yup.string()
+      .required("Privalomas laukas")
+      .matches(
+        /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
+        "Neteisingas datos formatas, YYYY-MM-DD"
+      ),
+    to: Yup.string()
+      .required("Privalomas laukas")
+      .matches(
+        /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
+        "Neteisingas datos formatas, YYYY-MM-DD"
+      ),
+  });
+
   const history = useHistory();
-  const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPass, setRepeatPass] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // await api
-    //   .post("/Users", {
-    //     name,
-    //     email,
-    //     password,
-    //   })
-    //   .then((resp: any) => {
-    //     const data: any = jwt(resp.data.authToken);
-    //     alert("Vartotojas užregistruotas");
-    //     localStorage.setItem("token", resp.data.authToken);
-    //     dispatch(
-    //       setUserType({
-    //         level: data.level,
-    //         name: data.name,
-    //         id: data.id,
-    //       })
-    //     );
-    //     history.push(paths.availableTimes);
-    //   })
-    //   .catch((x) => alert(x.response.data));
+  const handleSubmit = async (event: any) => {
+    if (props) {
+      const resp = await api
+        .post("/Inventor/ChangeInventor", {
+          id: props.id,
+          name: event.name,
+          amount: parseInt(event.amount),
+          room: event.cabinet,
+        })
+        .then((resp) => {
+          history.push(paths.inventory);
+          alert("Redagavimas sėkmingas");
+        })
+        .catch((err) => alert("Serverio klaida"));
+    } else {
+      const resp = await api
+        .post("/Inventor/AddInventor", {
+          name: event.name,
+          amount: parseInt(event.amount),
+          room: event.cabinet,
+          free: parseInt(event.free),
+          goodFrom: event.from,
+          goodUntil: event.to,
+        })
+        .then((resp) => {
+          alert("Inventorius sukurtas sėkmingai");
+          history.push(paths.inventory);
+        })
+        .catch((err) => alert("Serverio klaida"));
+    }
+  };
+
+  const initialValues = {
+    name: props ? props.name : "",
+    amount: props ? props.quantity : "",
+    cabinet: props ? props.cabinet : "",
+    free: props ? props.free : "",
+    from: props ? props.from : "",
+    to: props ? props.to : "",
   };
 
   return (
@@ -51,71 +88,36 @@ const InventoryPage = (data: any) => {
         padding="20px"
         textAlign="center"
       >
-        <h2>
-          {!props ? "Inventoriaus registacija" : "Inventoriaus redagavimas"}
-        </h2>
-        <form style={{ display: "grid" }} onSubmit={handleSubmit}>
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Vardas"
-            name="name"
-            defaultValue={props ? props.name : ""}
-            required
-          />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Kiekis"
-            name="quantity"
-            defaultValue={props ? props.quantity : ""}
-            required
-          />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Kabineto nr."
-            name="cabinet"
-            defaultValue={props ? props.cabinet : ""}
-            required
-          />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Laisvi vnt."
-            name="free"
-            defaultValue={props ? props.free : ""}
+        <FormikForm
+          initialValues={initialValues}
+          handleSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
+          <h2>
+            {!props ? "Inventoriaus registacija" : "Inventoriaus redagavimas"}
+          </h2>
+          <FormikTextField formikKey="name" label="Pavadinimas" />
+          <FormikTextField formikKey="amount" label="Kiekis" />
+          <FormikTextField formikKey="cabinet" label="Kabineto nr." />
+          <FormikTextField
+            formikKey="free"
+            label="Laisvu vnt."
             disabled={props ? true : false}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
+          <FormikTextField
+            formikKey="from"
             label="Galioja nuo"
-            name="from"
-            defaultValue={props ? props.from : ""}
             disabled={props ? true : false}
-            required
           />
-          <TextField
-            style={{ paddingBottom: "20px" }}
-            color="primary"
-            id="outlined-basic"
-            label="Galioja iki"
-            name="to"
-            defaultValue={props ? props.to : ""}
+          <FormikTextField
+            formikKey="to"
+            label="Galiojima iki"
             disabled={props ? true : false}
-            required
           />
           <Button color="primary" variant="contained" type="submit">
-            {!props ? "Registruoti" : "Redaguoti"}
+            {!props ? "Pridėti" : "Redaguoti"}
           </Button>
-        </form>
+        </FormikForm>
       </Box>
     </FormWrapper>
   );
