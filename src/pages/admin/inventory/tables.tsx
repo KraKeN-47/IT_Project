@@ -19,13 +19,25 @@ import { useSelector } from "react-redux";
 
 export const ReservationsTable = () => {
   const userId: any = useSelector(selectUserId());
+  const [myReservations, setMyReservations] = useState<any>([]);
+
   useEffect(() => {
     fetchData();
   }, []);
   const fetchData = async () => {
-    const resp = await api.get(
-      `/InventorReservation/getAllInventorReservations/${userId}`
-    );
+    const resp = await api
+      .get(`/InventorReservation/getAllInventorReservations/${userId}`)
+      .then((resp) => setMyReservations(resp.data))
+      .catch((err) => alert("Serverio klaida"));
+  };
+  const handleCancelReservation = async (id: any) => {
+    const resp = await api
+      .delete(`/InventorReservation/CancelReservation/${id}`)
+      .then((resp) => {
+        alert("Rezervacija atšaukta sėkmingai");
+        window.location.reload();
+      })
+      .catch((err) => alert("Serverio klaida"));
   };
   return (
     <Box
@@ -34,35 +46,37 @@ export const ReservationsTable = () => {
       padding="20px"
       textAlign="center"
     >
+      {console.log(myReservations)}
       <h2>Mano rezervacijos</h2>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Pavadinimas</TableCell>
-              <TableCell align="center">Kiekis</TableCell>
-              <TableCell align="center">Kabineto nr.</TableCell>
-              <TableCell align="center">Laisvi vnt.</TableCell>
-              <TableCell align="center">Galioja nuo</TableCell>
-              <TableCell align="center">Galioja iki</TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell align="center">Inventorius</TableCell>
+              <TableCell align="center">Data</TableCell>
+              <TableCell align="center">Laikas nuo</TableCell>
+              <TableCell align="center">Laikas iki</TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell align="center">Pavadinimas</TableCell>
-              <TableCell align="center">Kiekis</TableCell>
-              <TableCell align="center">Kabineto nr.</TableCell>
-              <TableCell align="center">Laisvi vnt.</TableCell>
-              <TableCell align="center">Galioja nuo</TableCell>
-              <TableCell align="center">Galioja iki</TableCell>
-              <TableCell align="center">
-                <Fab size="small">
-                  <RemoveIcon />
-                </Fab>
-              </TableCell>
-            </TableRow>
+            {myReservations &&
+              myReservations.map((o: any) => (
+                <TableRow>
+                  <TableCell align="center">{o.inventorius}</TableCell>
+                  <TableCell align="center">{o.data}</TableCell>
+                  <TableCell align="center">{o.laikasNuo}</TableCell>
+                  <TableCell align="center">{o.laikasIki}</TableCell>
+                  <TableCell align="center">
+                    <Fab
+                      size="small"
+                      onClick={() => handleCancelReservation(o.id)}
+                    >
+                      <RemoveIcon />
+                    </Fab>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

@@ -43,6 +43,7 @@ export const burgerMenuItemsData = ({
     },
     children: "Registruotis",
     level: -1,
+    name: "register",
   },
   {
     onClick: () => {
@@ -51,6 +52,7 @@ export const burgerMenuItemsData = ({
     },
     children: "Prisijungti",
     level: -1,
+    name: "login",
   },
   {
     onClick: () => {
