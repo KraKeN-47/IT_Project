@@ -51,6 +51,7 @@ export const burgerMenuItemsData = ({
     },
     children: "Registruotis",
     level: -1,
+    name: "register",
   },
   {
     onClick: () => {
@@ -59,6 +60,15 @@ export const burgerMenuItemsData = ({
     },
     children: "Prisijungti",
     level: -1,
+    name: "login",
+  },
+  {
+    onClick: () => {
+      handleClose();
+      location.pathname !== paths.clients && history.push(paths.clients);
+    },
+    children: "Klientai",
+    level: 2,
   },
   {
     onClick: () => {

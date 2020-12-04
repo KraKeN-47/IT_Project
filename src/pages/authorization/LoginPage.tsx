@@ -13,7 +13,6 @@ import { FormWrapper, FormikForm, FormikTextField } from "components";
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const validationSchema = Yup.object({
     email: Yup.string()
       .required("Privalomas laukas")
