@@ -21,6 +21,7 @@ import {
   ReserveInventoryPage,
   AllReportsPage,
   SingleReportPage,
+  BuyServicePage,
 } from "pages";
 import { Routes } from "types/types";
 import Path from "./Path";
@@ -164,6 +165,12 @@ export const routes: Routes[] = [
     path: paths.singleReport,
     component: SingleReportPage,
     userLevel: 3,
+    protected: true,
+  },
+  {
+    path: paths.reserveService,
+    component: BuyServicePage,
+    userLevel: 1,
     protected: true,
   },
 ];

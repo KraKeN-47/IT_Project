@@ -1,6 +1,7 @@
 import { Box, Button, Checkbox, FormControlLabel } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { FormikSelectField } from "formik-material-fields";
 import * as Yup from "yup";
 
 import { api } from "global/variables";
@@ -10,6 +11,28 @@ import { FormikForm, FormikTextField, FormWrapper } from "components";
 const ServicesPage = (data: any) => {
   const props = data.location.state ? data.location.state.props : null;
   const history = useHistory();
+  const isEdit = props ? true : false;
+  const [workers, setWorkers] = useState<any>([]);
+
+  useEffect(() => {
+    fetchWorkers();
+  }, []);
+
+  const fetchWorkers = async () => {
+    await api.get("/Client/workers").then((resp) => {
+      const workerArr = resp.data;
+      const workersWithId: object[] = [];
+      workerArr.map((worker, index) => {
+        const obj = {
+          label: `${worker.vardas} ${worker.pavarde}`,
+          value: parseInt(worker.id),
+        };
+        workersWithId.push({ ...obj });
+      });
+      setWorkers(workersWithId);
+    });
+  };
+
   const [anesthesia, setAnesthesia] = useState(
     props ? props.anesthesia : false
   );
@@ -17,21 +40,39 @@ const ServicesPage = (data: any) => {
     setAnesthesia(checked);
   };
   const handleSubmit = async (event: any) => {
-    const resp = await api
-      .post("/Service/Updateservice", {
-        id: props.id,
-        pavadinimas: event.name,
-        rizika: parseInt(event.risk),
-        kaina: parseInt(event.cost),
-        aprasymas: event.description,
-        narkoze: anesthesia,
-        trukme: event.time,
-      })
-      .then((resp) => {
-        alert("Redagavimas sėkmingas");
-        history.push(paths.services);
-      })
-      .catch((err) => alert("Serverio klaida."));
+    if (isEdit) {
+      const resp = await api
+        .put("/Service/UpdateService", {
+          id: parseInt(props.id),
+          pavadinimas: event.name,
+          rizika: parseInt(event.risk),
+          kaina: parseFloat(event.cost),
+          aprasymas: event.description,
+          narkoze: anesthesia,
+          trukme: event.time,
+        })
+        .then((resp) => {
+          alert("Redagavimas sėkmingas");
+          history.push(paths.services);
+        })
+        .catch((err) => alert("Serverio klaida."));
+    } else {
+      const resp = await api
+        .post("/Service/AddService", {
+          rizika: parseInt(event.risk),
+          pavadinimas: event.name,
+          kaina: parseInt(event.cost),
+          aprasymas: event.description,
+          narkoze: anesthesia,
+          trukme: event.time,
+          fkDarbuotojaiidDarbuotojai: parseInt(event.worker),
+        })
+        .then((resp) => {
+          alert("Paslauga pridėta sekmingai");
+          history.push(paths.services);
+        })
+        .catch((err) => alert("Serverio klaida"));
+    }
   };
   const initialValues = {
     name: props ? props.name : "",
@@ -39,6 +80,7 @@ const ServicesPage = (data: any) => {
     risk: props ? props.risk : "",
     cost: props ? props.cost : "",
     time: props ? props.time : "",
+    worker: props ? props.workerId : "",
   };
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -54,6 +96,7 @@ const ServicesPage = (data: any) => {
     time: Yup.string()
       .required("Privalomas laukas")
       .min(1, "Mažiausiai 1 simbolis"),
+    worker: Yup.string().required("Privalomas laukas"),
   });
   return (
     <FormWrapper>
@@ -84,6 +127,7 @@ const ServicesPage = (data: any) => {
           />
           <FormControlLabel
             name="anesthesia"
+            style={{ marginBottom: "10px" }}
             control={
               <Checkbox defaultChecked={props ? props.anesthesia : false} />
             }
@@ -92,7 +136,23 @@ const ServicesPage = (data: any) => {
           />
 
           <FormikTextField formikKey="time" label="Trukmė" variant="filled" />
-          <Button color="primary" variant="contained" type="submit">
+          {workers ? (
+            <FormikSelectField
+              style={{ marginBottom: "20px" }}
+              name="worker"
+              label="Darbuotojas"
+              margin="normal"
+              options={workers}
+            />
+          ) : (
+            alert("Nėra darbuotojų , todėl negalima sukurti paslaugų!")
+          )}
+          <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            disabled={!workers ? true : false}
+          >
             {!props ? "Registruoti" : "Redaguoti"}
           </Button>
         </FormikForm>

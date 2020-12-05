@@ -6,14 +6,13 @@ const FormWrapper: React.FC = (props) => {
     <Box
       style={{
         display: "flex",
-        position: "absolute",
         alignItems: "center",
         justifyContent: "center",
         bottom: 0,
         top: 0,
         right: 0,
         left: 0,
-        marginTop: "5%",
+        marginTop: "10%",
       }}
     >
       {props.children}

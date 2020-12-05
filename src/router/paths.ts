@@ -17,6 +17,7 @@ export enum paths {
   addService = "/addService",
   editService = "/editService",
   myServices = "/serviceHistory",
+  reserveService = "/reserveService",
   // Pet crud
   addPet = "/addPet",
   myPets = "/myPets",

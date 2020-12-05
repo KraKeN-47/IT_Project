@@ -19,8 +19,6 @@ import { FormWrapper } from "components";
 import { useHistory } from "react-router";
 import { paths } from "router/paths";
 import { api } from "global/variables";
-import { useSelector } from "react-redux";
-import { selectUserId } from "modules/userType/userData.selector";
 
 export default function DisplayServicesPage() {
   const history = useHistory();
@@ -69,7 +67,7 @@ export default function DisplayServicesPage() {
                 <TableCell align="center">Aprašymas</TableCell>
                 <TableCell align="center">Narkozė</TableCell>
                 <TableCell align="center">Trukmė</TableCell>
-                <TableCell align="center"></TableCell>
+                <TableCell align="center">Darbuotojas</TableCell>
                 <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
@@ -81,8 +79,11 @@ export default function DisplayServicesPage() {
                     <TableCell align="center">{o.rizika}</TableCell>
                     <TableCell align="center">{o.kaina}</TableCell>
                     <TableCell align="center">{o.aprasymas}</TableCell>
-                    <TableCell align="center">{o.narkoze}</TableCell>
+                    <TableCell align="center">
+                      {o.narkoze === true ? "taip" : "ne"}
+                    </TableCell>
                     <TableCell align="center">{o.trukme}</TableCell>
+                    <TableCell align="center">{o.darbutojoVarPav}</TableCell>
                     <TableCell align="center">
                       <NavLink
                         to={{
@@ -96,6 +97,7 @@ export default function DisplayServicesPage() {
                               description: o.aprasymas,
                               anesthesia: o.narkoze,
                               time: o.trukme,
+                              workerId: o.fkDarbuotojaiidDarbuotojai,
                             },
                             loading: true,
                           },

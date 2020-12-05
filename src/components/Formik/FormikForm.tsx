@@ -19,7 +19,7 @@ const FormikForm: React.FC<FormProps> = (props) => {
   return (
     <FormWrapper>
       <Box
-        width="30%"
+        width="100%"
         style={{ background: "tan" }}
         borderRadius="20px"
         padding="20px"
