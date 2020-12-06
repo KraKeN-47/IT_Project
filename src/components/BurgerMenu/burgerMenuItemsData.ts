@@ -34,7 +34,7 @@ export const burgerMenuItemsData = ({
       location.pathname !== paths.workers && history.push(paths.workers);
     },
     children: "Darbuotojai",
-    level: 2,
+    level: 3,
   },
   {
     onClick: () => {

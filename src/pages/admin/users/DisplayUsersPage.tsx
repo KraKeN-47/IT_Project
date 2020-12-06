@@ -16,9 +16,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { FormWrapper } from "components";
 import { api } from "global/variables";
 import UserPets from "./UserPets";
+import { selectUserTypeLevel } from "modules/userType/userData.selector";
+import { useSelector } from "react-redux";
 
 export default function DisplayUsersPage() {
   const [users, setUsers] = useState<any>([]);
+  const userLevel = useSelector(selectUserTypeLevel());
   const getUsers = () => {
     api
       .get("/Client/clients")
@@ -67,18 +70,25 @@ export default function DisplayUsersPage() {
             </TableHead>
             <TableBody>
               {users.map((user) => (
-                <Tooltip key={user.id} placement="left" arrow title={<UserPets pets={user.pets} />}>
+                <Tooltip
+                  key={user.id}
+                  placement="left"
+                  arrow
+                  title={<UserPets pets={user.pets} />}
+                >
                   <TableRow>
                     <TableCell align="center">{user.vardas}</TableCell>
                     <TableCell align="center">{user.pavarde}</TableCell>
                     <TableCell align="center">{user.adresas}</TableCell>
                     <TableCell align="center">{user.pastas}</TableCell>
                     <TableCell align="center">{user.telefonoNr}</TableCell>
-                    <TableCell align="center">
-                      <IconButton onClick={() => removeUser(user.id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
+                    {userLevel === 3 && (
+                      <TableCell align="center">
+                        <IconButton onClick={() => removeUser(user.id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    )}{" "}
                   </TableRow>
                 </Tooltip>
               ))}

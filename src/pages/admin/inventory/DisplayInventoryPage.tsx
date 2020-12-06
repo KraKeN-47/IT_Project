@@ -7,13 +7,15 @@ import { useHistory } from "react-router";
 import { paths } from "router/paths";
 
 import { ReservationsTable, InventoryTable } from "./tables";
+import { useSelector } from "react-redux";
+import { selectUserTypeLevel } from "modules/userType/userData.selector";
 
 export default function DisplayInventoryPage() {
   const history = useHistory();
   const handleRedirectAddWorker = () => {
     history.push(paths.addInventory);
   };
-
+  const userLevel = useSelector(selectUserTypeLevel());
   return (
     <FormWrapper>
       <Box
@@ -25,11 +27,13 @@ export default function DisplayInventoryPage() {
       >
         <h2>Inventoriaus lentelė</h2>
         <InventoryTable />
-        <Box mt="20px">
-          <Fab color="primary" onClick={handleRedirectAddWorker}>
-            <AddIcon />
-          </Fab>
-        </Box>
+        {userLevel === 3 && (
+          <Box mt="20px">
+            <Fab color="primary" onClick={handleRedirectAddWorker}>
+              <AddIcon />
+            </Fab>
+          </Box>
+        )}
         <ReservationsTable />
       </Box>
     </FormWrapper>

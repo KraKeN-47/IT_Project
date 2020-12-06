@@ -14,7 +14,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { paths } from "router/paths";
 import { api } from "global/variables";
-import { selectUserId } from "modules/userType/userData.selector";
+import {
+  selectUserId,
+  selectUserTypeLevel,
+} from "modules/userType/userData.selector";
 import { useSelector } from "react-redux";
 
 export const ReservationsTable = () => {
@@ -86,7 +89,7 @@ export const ReservationsTable = () => {
 
 export const InventoryTable = () => {
   const [inventory, setInventory] = useState<any>();
-
+  const userLevel = useSelector(selectUserTypeLevel());
   useEffect(() => {
     fetchInventory();
     console.log("Refreshed my reservations");
@@ -134,37 +137,42 @@ export const InventoryTable = () => {
                   <TableCell align="center">{e.free}</TableCell>
                   <TableCell align="center">{e.goodFrom}</TableCell>
                   <TableCell align="center">{e.goodUntil}</TableCell>
-                  <TableCell align="center">
-                    <NavLink
-                      to={{
-                        pathname: paths.editInventory,
-                        state: {
-                          props: {
-                            id: e.id,
-                            name: e.name,
-                            quantity: e.amount,
-                            cabinet: e.room,
-                            free: e.free,
-                            from: e.goodFrom,
-                            to: e.goodUntil,
-                          },
-                        },
-                      }}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Fab size="small">
-                        <EditIcon />
-                      </Fab>
-                    </NavLink>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Fab
-                      size="small"
-                      onClick={() => handleDeleteInventory(e.id)}
-                    >
-                      <DeleteIcon />
-                    </Fab>
-                  </TableCell>
+                  {userLevel === 3 && (
+                    <>
+                      {" "}
+                      <TableCell align="center">
+                        <NavLink
+                          to={{
+                            pathname: paths.editInventory,
+                            state: {
+                              props: {
+                                id: e.id,
+                                name: e.name,
+                                quantity: e.amount,
+                                cabinet: e.room,
+                                free: e.free,
+                                from: e.goodFrom,
+                                to: e.goodUntil,
+                              },
+                            },
+                          }}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Fab size="small">
+                            <EditIcon />
+                          </Fab>
+                        </NavLink>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Fab
+                          size="small"
+                          onClick={() => handleDeleteInventory(e.id)}
+                        >
+                          <DeleteIcon />
+                        </Fab>
+                      </TableCell>
+                    </>
+                  )}
                   <TableCell align="center" size="small">
                     <NavLink
                       to={{

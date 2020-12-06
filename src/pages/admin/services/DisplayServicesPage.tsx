@@ -19,12 +19,16 @@ import { FormWrapper } from "components";
 import { useHistory } from "react-router";
 import { paths } from "router/paths";
 import { api } from "global/variables";
+import { selectUserTypeLevel } from "modules/userType/userData.selector";
+import { useSelector } from "react-redux";
 
 export default function DisplayServicesPage() {
   const history = useHistory();
   const handleRedirectAddWorker = () => {
     history.push(paths.addService);
   };
+  const userLevel = useSelector(selectUserTypeLevel());
+
   const [services, setServices] = useState<any>([]);
   useEffect(() => {
     fetchData();
@@ -109,24 +113,28 @@ export default function DisplayServicesPage() {
                         </Fab>
                       </NavLink>
                     </TableCell>
-                    <TableCell align="center">
-                      <Fab
-                        size="small"
-                        onClick={() => handleDeleteService(o.id)}
-                      >
-                        <DeleteIcon />
-                      </Fab>
-                    </TableCell>
+                    {userLevel === 3 && (
+                      <TableCell align="center">
+                        <Fab
+                          size="small"
+                          onClick={() => handleDeleteService(o.id)}
+                        >
+                          <DeleteIcon />
+                        </Fab>
+                      </TableCell>
+                    )}{" "}
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <Box mt="20px">
-          <Fab color="primary" onClick={handleRedirectAddWorker}>
-            <AddIcon />
-          </Fab>
-        </Box>
+        {userLevel === 3 && (
+          <Box mt="20px">
+            <Fab color="primary" onClick={handleRedirectAddWorker}>
+              <AddIcon />
+            </Fab>
+          </Box>
+        )}
       </Box>
     </FormWrapper>
   );
